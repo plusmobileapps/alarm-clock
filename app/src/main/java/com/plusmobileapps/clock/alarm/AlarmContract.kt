@@ -12,6 +12,7 @@ interface AlarmContract {
 
     interface Presenter: BasePresenter {
         fun createAlarmClicked()
+        fun timePicked(hour: Int, min: Int)
         fun alarmDeleteClicked()
         fun alarmClicked(position: Int)
         fun backButtonPressed()

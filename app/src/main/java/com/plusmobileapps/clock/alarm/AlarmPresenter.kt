@@ -10,8 +10,10 @@ class AlarmPresenter(private val view: AlarmContract.View): AlarmContract.Presen
 
     }
 
-    override fun createAlarmClicked() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun createAlarmClicked() = view.showTimePicker()
+
+    override fun timePicked(hour: Int, min: Int) {
+
     }
 
     override fun alarmDeleteClicked() {
