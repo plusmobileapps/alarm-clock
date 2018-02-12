@@ -8,6 +8,7 @@ interface AlarmContract {
     interface View: BaseView<Presenter> {
         fun showTimePicker()
         fun showAlarms()
+        fun showFab(show: Boolean)
     }
 
     interface Presenter: BasePresenter {

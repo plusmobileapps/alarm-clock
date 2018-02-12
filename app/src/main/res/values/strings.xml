@@ -1,4 +1,4 @@
-<resources>
+ <resources>
     <string name="app_name">Clock+</string>
     <string name="title_alarm">Alarm</string>
     <string name="title_timer">Timer</string>
@@ -8,4 +8,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="delete">Delete</string>
+     <string name="add_timer">Add Timer</string>
+     <string name="add_alarm">Add Alarm</string>
+
+
 </resources>

@@ -1,8 +1,5 @@
 package com.plusmobileapps.clock.main
 
-import com.plusmobileapps.clock.BasePresenter
-import com.plusmobileapps.clock.BaseView
-
 interface MainActivityContract {
 
     interface View {
@@ -16,6 +13,7 @@ interface MainActivityContract {
         fun navButtonClicked(position: Int)
         fun pageSwiped(position: Int)
         fun backButtonPressed()
+        fun onPageScrollStateChanged(state: Int)
     }
 
 }

@@ -9,7 +9,8 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"android:padding="@dimen/fab_margin_bottom"
+        android:layout_height="match_parent"
+        android:padding="@dimen/fab_margin_bottom"
         android:background="@color/colorPrimary"
         android:layout_above="@+id/navigation"/>
 
@@ -25,7 +26,7 @@
         />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addTimerButton"
+        android:id="@+id/resumeTimerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
@@ -47,12 +48,27 @@
         />
 
     <Button
+        android:id="@+id/timerDeleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:textColor="@color/white"
+        style="?android:attr/borderlessButtonStyle"
+        />
+
+
+    <Button
+        android:id="@+id/addTimerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_timer"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:textColor="@color/white"
         style="?android:attr/borderlessButtonStyle"

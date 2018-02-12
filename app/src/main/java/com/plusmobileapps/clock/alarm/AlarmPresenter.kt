@@ -13,7 +13,7 @@ class AlarmPresenter(private val view: AlarmContract.View): AlarmContract.Presen
     override fun createAlarmClicked() = view.showTimePicker()
 
     override fun timePicked(hour: Int, min: Int) {
-
+        
     }
 
     override fun alarmDeleteClicked() {

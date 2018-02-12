@@ -1,17 +1,15 @@
 package com.plusmobileapps.clock.alarm
 
 import android.app.TimePickerDialog
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
-import kotlinx.android.synthetic.main.fragment_alarm.*
-
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.util.showOrGone
+import kotlinx.android.synthetic.main.fragment_alarm.*
 import java.util.*
 
 class AlarmFragment : Fragment(), AlarmContract.View {
@@ -33,6 +31,8 @@ class AlarmFragment : Fragment(), AlarmContract.View {
         mPresenter?.start()
         addAlarmButton.setOnClickListener { mPresenter?.createAlarmClicked() }
     }
+
+    override fun showFab(show: Boolean) = addAlarmButton.showOrGone(show)
 
     override fun showTimePicker() {
         val c = Calendar.getInstance()

@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     private val pageChangeListener = object:ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
-            //presenter.pagechanging(state)
+            presenter.onPageScrollStateChanged(state)
+
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
