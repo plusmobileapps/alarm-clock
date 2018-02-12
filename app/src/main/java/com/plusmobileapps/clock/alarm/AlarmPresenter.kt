@@ -7,7 +7,7 @@ class AlarmPresenter(private val view: AlarmContract.View): AlarmContract.Presen
     }
 
     override fun start() {
-
+        //view.showAlarms(List<Alarm> alarms)
     }
 
     override fun createAlarmClicked() = view.showTimePicker()

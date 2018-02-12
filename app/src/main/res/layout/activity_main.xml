@@ -9,8 +9,54 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"android:padding="@dimen/fab_margin_bottom"
+        android:background="@color/colorPrimary"
         android:layout_above="@+id/navigation"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addAlarmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:src="@drawable/ic_alarm_add_white_24px"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        app:fabSize="normal"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addTimerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:src="@drawable/ic_alarm_add_white_24px"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        app:fabSize="normal"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/startTimerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:src="@drawable/ic_alarm_add_white_24px"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        app:fabSize="normal"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:textColor="@color/white"
+        style="?android:attr/borderlessButtonStyle"
+        />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

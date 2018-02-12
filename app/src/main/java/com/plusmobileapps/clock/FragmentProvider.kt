@@ -4,7 +4,7 @@ import com.plusmobileapps.clock.alarm.AlarmFragment
 import com.plusmobileapps.clock.stopwatch.StopwatchFragment
 import com.plusmobileapps.clock.timer.TimerFragment
 
-object FragmentFactory {
+object FragmentProvider {
 
     private val alarmFragment by lazy {
         AlarmFragment.newInstance()

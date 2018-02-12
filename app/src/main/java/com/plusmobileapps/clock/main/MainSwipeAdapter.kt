@@ -3,15 +3,15 @@ package com.plusmobileapps.clock.main
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.plusmobileapps.clock.FragmentFactory
+import com.plusmobileapps.clock.FragmentProvider
 
 class MainSwipeAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int): Fragment {
         return when(position) {
-            BottomNav.ALARM.ordinal -> FragmentFactory.alarmFragmentInstance()
-            BottomNav.TIMER.ordinal -> FragmentFactory.timerFragmentInstance()
-            BottomNav.STOPWATCH.ordinal -> FragmentFactory.stopwatchInstance()
+            BottomNav.ALARM.ordinal -> FragmentProvider.alarmFragmentInstance()
+            BottomNav.TIMER.ordinal -> FragmentProvider.timerFragmentInstance()
+            BottomNav.STOPWATCH.ordinal -> FragmentProvider.stopwatchInstance()
             else -> Fragment()
         }
     }

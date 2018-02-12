@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import com.plusmobileapps.clock.FragmentFactory
+import com.plusmobileapps.clock.FragmentProvider
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.alarm.AlarmPresenter
 
@@ -14,9 +14,7 @@ enum class BottomNav {
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
-    private val presenter by lazy {
-        MainActivityPresenter(this)
-    }
+    private val presenter = MainActivityPresenter(this)
 
     private val navigation by lazy {
         findViewById<BottomNavigationView>(R.id.navigation)
@@ -38,7 +36,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun setUpPresenters() {
-        AlarmPresenter(FragmentFactory.alarmFragmentInstance())
+        AlarmPresenter(FragmentProvider.alarmFragmentInstance())
         //TODO: Setup timer and stop watch presenters
     }
 
@@ -82,6 +80,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     private val pageChangeListener = object:ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
+            //presenter.pagechanging(state)
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
