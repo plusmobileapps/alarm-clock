@@ -2,18 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_alarm"
     tools:context="com.plusmobileapps.clock.alarm.AlarmFragment"
     android:background="@color/colorPrimary">
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addAlarmButton"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+    <TextView
+        android:id="@+id/alarm_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:fabSize="normal"
-        android:src="@drawable/ic_alarm_add_white_24px"
-        android:layout_gravity="bottom|center_horizontal"/>
+        android:textColor="@color/white"
+        android:text="Alarm"/>
 
 </FrameLayout>

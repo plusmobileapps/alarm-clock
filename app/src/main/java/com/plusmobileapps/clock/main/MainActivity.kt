@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity
 import com.plusmobileapps.clock.FragmentProvider
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.alarm.AlarmPresenter
+import com.plusmobileapps.clock.util.showOrInvisible
+import kotlinx.android.synthetic.main.activity_main.*
 
 enum class BottomNav {
     ALARM, TIMER, STOPWATCH
 }
 
-class MainActivity : AppCompatActivity(), MainActivityContract.View {
+class MainActivity() : AppCompatActivity(), MainActivityContract.View {
 
     private val presenter = MainActivityPresenter(this)
 
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             addOnPageChangeListener(pageChangeListener)
         }
         setUpPresenters()
+        fab.setOnClickListener { presenter.onFabClicked() }
     }
 
     private fun setUpPresenters() {
@@ -46,11 +49,39 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun changePage(position: Int) {
-        //TODO: wire up the swipe adapter to change page
+        viewPager.currentItem = position
     }
 
-    override fun changeNavHighlight(position: Int) {
-        navigation.selectedItemId = position
+    override fun changeNavHighlight(itemId: Int) {
+        navigation.selectedItemId = itemId
+    }
+
+    override fun showButtons(show: Boolean) {
+        fab.showOrInvisible(show)
+        addTimerButton.showOrInvisible(show)
+        timerDeleteButton.showOrInvisible(show)
+    }
+
+    override fun showAlarm() {
+        fab.showOrInvisible(true)
+        fab.setImageDrawable(getDrawable(R.drawable.ic_alarm_add_white_24px))
+    }
+
+    override fun showCreateTimer() {
+        fab.showOrInvisible(true)
+        fab.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_white_24px))
+    }
+
+    override fun showTimerInProgress() {
+        fab.showOrInvisible(true)
+        fab.setImageDrawable(getDrawable(R.drawable.ic_pause_white_24px))
+        addTimerButton.showOrInvisible(true)
+        timerDeleteButton.showOrInvisible(true)
+    }
+
+    override fun showStopWatch() {
+        fab.showOrInvisible(true)
+        fab.setImageDrawable(getDrawable(R.drawable.ic_stopwatch_white_24px))
     }
 
     override fun finishActivity() = finish()
@@ -85,6 +116,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
         }
 
         override fun onPageSelected(position: Int) = presenter.pageSwiped(position)

@@ -29,10 +29,7 @@ class AlarmFragment : Fragment(), AlarmContract.View {
     override fun onResume() {
         super.onResume()
         mPresenter?.start()
-        addAlarmButton.setOnClickListener { mPresenter?.createAlarmClicked() }
     }
-
-    override fun showFab(show: Boolean) = addAlarmButton.showOrGone(show)
 
     override fun showTimePicker() {
         val c = Calendar.getInstance()
@@ -40,6 +37,10 @@ class AlarmFragment : Fragment(), AlarmContract.View {
         val minute = c.get(Calendar.MINUTE)
         val dialog = TimePickerDialog(context, timePickerListener, hour, minute,true)
         dialog.show()
+    }
+
+    fun fabClicked() {
+        mPresenter?.createAlarmClicked()
     }
 
     override fun showAlarms() {
