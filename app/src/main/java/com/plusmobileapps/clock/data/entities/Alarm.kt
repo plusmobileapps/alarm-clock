@@ -8,20 +8,20 @@ import java.time.DayOfWeek
 @Entity
 data class Alarm(
         @PrimaryKey(autoGenerate = true)
-        val id: Int,
+        var id: Int,
 
         @ColumnInfo(name = "min")
-        val min: Int,
+        var min: Int,
 
         @ColumnInfo(name = "hour")
-        val hour: Int,
+        var hour: Int,
 
         @ColumnInfo(name = "enabled")
-        val enabled: Boolean = true,
+        var enabled: Boolean = true,
 
-        @ColumnInfo(name = "daysToRepeat")
-        val daysToRepeat: List<DayOfWeek>,
+//        @ColumnInfo(name = "daysToRepeat")
+//        var daysToRepeat: List<DayOfWeek>,
 
         @ColumnInfo(name = "isRepeating")
-        val isRepeating: Boolean = false ) {
+        var isRepeating: Boolean = false ) {
 }

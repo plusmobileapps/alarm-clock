@@ -40,6 +40,11 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     kapt "android.arch.persistence.room:compiler:$roomVersion"
 
+    //Dependency Injection
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

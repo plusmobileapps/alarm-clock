@@ -13,7 +13,7 @@ import java.util.*
 
 class AlarmFragment : Fragment(){
 
-    lateinit var viewModel: AlarmViewModel
+    private lateinit var viewModel: AlarmViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

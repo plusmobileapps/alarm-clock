@@ -1,9 +1,8 @@
-package com.plusmobileapps.clock
+package com.plusmobileapps.clock.di
 
 import android.app.Application
 import android.content.Context
 import com.plusmobileapps.clock.data.AppDatabase
-import com.plusmobileapps.clock.data.Repository
 
 
 class MyApplication: Application() {

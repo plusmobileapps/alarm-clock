@@ -34,14 +34,11 @@ class MainActivity() : AppCompatActivity(), MainActivityContract.View {
             adapter = MainSwipeAdapter(supportFragmentManager)
             addOnPageChangeListener(pageChangeListener)
         }
-        setUpPresenters()
-        fab.setOnClickListener { presenter.onFabClicked() }
+        fab.setOnClickListener {
+            //TODO: react on viewmodel
+        }
     }
 
-    private fun setUpPresenters() {
-        AlarmPresenter(FragmentProvider.alarmFragmentInstance())
-        //TODO: Setup timer and stop watch presenters
-    }
 
     override fun onResume() {
         super.onResume()
