@@ -1,6 +1,6 @@
 package com.plusmobileapps.clock.di
 
-import com.plusmobileapps.clock.alarm.AlarmFragment
+import com.plusmobileapps.clock.alarm.landing.AlarmFragment
 import dagger.Component
 import javax.inject.Singleton
 

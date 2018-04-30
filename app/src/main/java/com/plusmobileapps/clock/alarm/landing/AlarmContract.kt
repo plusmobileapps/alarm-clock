@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock.alarm
+package com.plusmobileapps.clock.alarm.landing
 
 import com.plusmobileapps.clock.BasePresenter
 import com.plusmobileapps.clock.BaseView

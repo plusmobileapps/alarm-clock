@@ -1,6 +1,6 @@
 package com.plusmobileapps.clock
 
-import com.plusmobileapps.clock.alarm.AlarmFragment
+import com.plusmobileapps.clock.alarm.landing.AlarmFragment
 import com.plusmobileapps.clock.stopwatch.StopwatchFragment
 import com.plusmobileapps.clock.timer.TimerFragment
 
