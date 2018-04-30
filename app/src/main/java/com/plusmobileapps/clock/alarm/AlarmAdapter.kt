@@ -23,7 +23,7 @@ class AlarmAdapter(var alarms: List<Alarm>) : RecyclerView.Adapter<AlarmAdapter.
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
         val alarm = alarms[position]
-        holder.alarmToggle.isEnabled = alarm.enabled
+        holder.alarmToggle.isChecked = alarm.enabled
         holder.alarmTime.text = alarm.printTime()
     }
 
