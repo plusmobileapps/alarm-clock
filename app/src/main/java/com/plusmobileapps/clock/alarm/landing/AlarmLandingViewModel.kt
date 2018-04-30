@@ -20,6 +20,8 @@ class AlarmLandingViewModel(private val alarmRepository: AlarmRepository): ViewM
         return alarms.value?.get(position)?.id
     }
 
+    fun getAlarmById(id: Int) = alarmRepository.getAlarm(id)
+
     fun addAlarm(hour: Int, min: Int) {
         val alarm = Alarm(hour = hour, min = min)
         alarmRepository.saveAlarm(alarm)

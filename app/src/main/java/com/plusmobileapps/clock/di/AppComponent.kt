@@ -1,5 +1,6 @@
 package com.plusmobileapps.clock.di
 
+import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
 import com.plusmobileapps.clock.alarm.landing.AlarmFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -9,5 +10,5 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(alarmFragment: AlarmFragment)
-
+    fun inject(alarmDetailActivity: AlarmDetailActivity)
 }
