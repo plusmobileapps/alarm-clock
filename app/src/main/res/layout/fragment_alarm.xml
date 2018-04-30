@@ -1,16 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_alarm"
     tools:context="com.plusmobileapps.clock.alarm.AlarmFragment"
     android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/alarm_textview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_alarm_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Alarm"/>
+        android:src="@drawable/ic_alarm_add_white_24px"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_horizontal|bottom"
+        app:fabSize="normal"
+        />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

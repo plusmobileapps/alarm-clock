@@ -1,9 +1,9 @@
 package com.plusmobileapps.clock.di
 
 import android.app.Application
+import com.plusmobileapps.clock.MyApplication
 import dagger.Module
 import dagger.Provides
-import javax.inject.Inject
 
 @Module
 class AppModule (private val application: MyApplication) {

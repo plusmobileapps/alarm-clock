@@ -8,13 +8,13 @@ import java.time.DayOfWeek
 @Entity
 data class Alarm(
         @PrimaryKey(autoGenerate = true)
-        var id: Int,
+        var id: Int? = null,
 
         @ColumnInfo(name = "min")
-        var min: Int,
+        var min: Int = -1,
 
         @ColumnInfo(name = "hour")
-        var hour: Int,
+        var hour: Int = -1,
 
         @ColumnInfo(name = "enabled")
         var enabled: Boolean = true,
@@ -24,4 +24,7 @@ data class Alarm(
 
         @ColumnInfo(name = "isRepeating")
         var isRepeating: Boolean = false ) {
+
+        fun printTime() = "$hour:$min"
+
 }

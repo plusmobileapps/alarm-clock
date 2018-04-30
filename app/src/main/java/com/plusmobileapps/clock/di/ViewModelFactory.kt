@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock
+package com.plusmobileapps.clock.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
