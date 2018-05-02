@@ -1,7 +1,8 @@
 package com.plusmobileapps.clock.di
 
 import android.arch.persistence.room.Room
-import com.plusmobileapps.clock.MyApplication
+import android.content.Context
+import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.data.AlarmRepository
 import com.plusmobileapps.clock.data.AppDatabase
 import com.plusmobileapps.clock.data.daos.AlarmDao
@@ -10,17 +11,15 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RoomModule(application: MyApplication) {
-
-    private val database = Room.databaseBuilder(
-            application,
-            AppDatabase::class.java,
-            "appDb.db")
-            .build()
+class RoomModule(private val appContext: Context) {
 
     @Provides
     @Singleton
-    fun providesRoomDatabase(): AppDatabase = database
+    fun providesRoomDatabase() = Room.databaseBuilder(
+                appContext.applicationContext,
+                AppDatabase::class.java,
+                "appDb.db")
+                .build()
 
     @Provides
     @Singleton
@@ -31,7 +30,5 @@ class RoomModule(application: MyApplication) {
     fun provideAlarmRepository(alarmDao: AlarmDao) = AlarmRepository(alarmDao)
 
     @Provides
-    @Singleton
-    fun provideViewModelFactory(alarmRepository: AlarmRepository) = ViewModelFactory(alarmRepository)
-
+    fun provideAlarmViewModel(alarmRepository: AlarmRepository) = AlarmLandingViewModel(alarmRepository)
 }

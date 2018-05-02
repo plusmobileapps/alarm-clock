@@ -2,7 +2,6 @@ package com.plusmobileapps.clock.alarm.landing
 
 import android.app.TimePickerDialog
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,14 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
-import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
+import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
 import com.plusmobileapps.clock.data.entities.Alarm
-import com.plusmobileapps.clock.di.ViewModelFactory
+import kotlinx.android.synthetic.main.fragment_alarm.*
 import java.util.*
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_alarm.*
 
 const val EXTRA_ALARM_ID = "alarm_id"
 
@@ -31,9 +29,7 @@ class AlarmFragment : Fragment(){
     }
 
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private lateinit var viewModel: AlarmLandingViewModel
+    lateinit var viewModel: AlarmLandingViewModel
 
     private val itemListener = object : AlarmItemListener {
         override fun alarmItemClicked(position: Int) {
@@ -71,7 +67,6 @@ class AlarmFragment : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java)
         add_alarm_button.setOnClickListener { showTimePicker(null, null, addAlarmTimeListener) }
         recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
