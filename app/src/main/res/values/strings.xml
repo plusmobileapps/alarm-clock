@@ -10,6 +10,15 @@
     <string name="delete">Delete</string>
     <string name="add_timer">Add Timer</string>
     <string name="add_alarm">Add Alarm</string>
+    <string name="repeats">Repeats:</string>
+
+    <string name="short_monday">M</string>
+    <string name="short_tuesday">Tu</string>
+    <string name="short_wednesday">W</string>
+    <string name="short_thursday">Th</string>
+    <string name="short_friday">F</string>
+    <string name="short_saturday">S</string>
+    <string name="short_sunday">Su</string>
 
 
 </resources>
