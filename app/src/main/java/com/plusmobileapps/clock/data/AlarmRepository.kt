@@ -1,6 +1,6 @@
 package com.plusmobileapps.clock.data
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.plusmobileapps.clock.data.daos.AlarmDao
 import com.plusmobileapps.clock.data.entities.Alarm
 import com.plusmobileapps.clock.ioThread

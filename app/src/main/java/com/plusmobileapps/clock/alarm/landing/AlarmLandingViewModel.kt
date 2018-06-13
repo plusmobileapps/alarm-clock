@@ -1,14 +1,21 @@
 package com.plusmobileapps.clock.alarm.landing
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.data.AlarmRepository
 import com.plusmobileapps.clock.data.entities.Alarm
+import javax.inject.Inject
 
 
-class AlarmLandingViewModel(private val alarmRepository: AlarmRepository): ViewModel() {
+class AlarmLandingViewModel @Inject constructor(private val alarmRepository: AlarmRepository): ViewModel() {
 
-    private val alarms = alarmRepository.getAlarms()
+    private val alarms: LiveData<List<Alarm>> = alarmRepository.getAlarms()
+    val showTimePickerToggle = MutableLiveData<Boolean>()
+
+    init {
+        showTimePickerToggle.value = false
+    }
 
     fun getAlarms(): LiveData<List<Alarm>> = alarms
 
@@ -20,7 +27,7 @@ class AlarmLandingViewModel(private val alarmRepository: AlarmRepository): ViewM
         return alarms.value?.get(position)?.id
     }
 
-    fun getAlarmById(id: Int) = alarmRepository.getAlarm(id)
+    fun getAlarmById(id: Int): LiveData<Alarm> = alarmRepository.getAlarm(id)
 
     fun addAlarm(hour: Int, min: Int) {
         val alarm = Alarm(hour = hour, min = min)
@@ -36,6 +43,10 @@ class AlarmLandingViewModel(private val alarmRepository: AlarmRepository): ViewM
             alarm.enabled = enabled
             alarmRepository.saveAlarm(alarm)
         }
+    }
+
+    fun showTimePicker() {
+        showTimePickerToggle.value = true
     }
 
 }

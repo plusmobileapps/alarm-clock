@@ -1,16 +1,18 @@
 package com.plusmobileapps.clock.alarm.landing
 
 import android.app.TimePickerDialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
@@ -18,16 +20,19 @@ import com.plusmobileapps.clock.data.entities.Alarm
 import com.plusmobileapps.clock.di.ViewModelFactory
 import java.util.*
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_alarm.*
 
 const val EXTRA_ALARM_ID = "alarm_id"
 
-class AlarmFragment : Fragment(){
+class AlarmFragment : androidx.fragment.app.Fragment(){
 
     companion object {
         fun newInstance(): AlarmFragment {
             return AlarmFragment()
         }
+    }
+
+    private val recyclerView by lazy {
+        activity?.findViewById<RecyclerView>(R.id.recycler_view)
     }
 
     @Inject
@@ -71,21 +76,21 @@ class AlarmFragment : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java)
-        add_alarm_button.setOnClickListener { showTimePicker(null, null, addAlarmTimeListener) }
-        recycler_view.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(AlarmLandingViewModel::class.java)
+        recyclerView?.apply {
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
             adapter = alarmAdapter
         }
-        subscribe()
+        subscribeToAlarmList()
+        subscribeToShowingTimePicker();
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_alarm, container, false)
     }
 
-    private fun subscribe() {
+    private fun subscribeToAlarmList() {
         val alarmsObserver = Observer<List<Alarm>>() {
             if(it != null){
                 alarmAdapter.apply {
@@ -95,6 +100,21 @@ class AlarmFragment : Fragment(){
             }
         }
         viewModel.getAlarms().observe(this, alarmsObserver)
+    }
+
+    private fun subscribeToShowingTimePicker() {
+        val observer = Observer<Boolean> {
+            when (it) {
+                true -> {
+                    showTimePicker(null, null, addAlarmTimeListener)
+                    viewModel.showTimePickerToggle.value = false
+                }
+                false -> {
+                    Log.d("WTF", "disabled")
+                }
+            }
+        }
+        viewModel.showTimePickerToggle.observe(this, observer)
     }
 
     private fun showTimePicker(startHour: Int?, startMin: Int?, timeListener: TimePickerDialog.OnTimeSetListener) {

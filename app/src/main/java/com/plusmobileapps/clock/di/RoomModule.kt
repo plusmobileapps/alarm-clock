@@ -1,6 +1,6 @@
 package com.plusmobileapps.clock.di
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.data.AlarmRepository
 import com.plusmobileapps.clock.data.AppDatabase
@@ -29,9 +29,6 @@ class RoomModule(application: MyApplication) {
     @Provides
     @Singleton
     fun provideAlarmRepository(alarmDao: AlarmDao) = AlarmRepository(alarmDao)
-
-    @Provides
-    @Singleton
-    fun provideViewModelFactory(alarmRepository: AlarmRepository) = ViewModelFactory(alarmRepository)
+    
 
 }

@@ -1,4 +1,8 @@
 <resources>
+
+    <string name="bottomSheetBehavior">com.google.android.material.bottomsheet.BottomSheetBehavior</string>
+
+
     <string name="app_name">Clock+</string>
     <string name="title_alarm">Alarm</string>
     <string name="title_timer">Timer</string>

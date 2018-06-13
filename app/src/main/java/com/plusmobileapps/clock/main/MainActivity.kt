@@ -1,10 +1,23 @@
 package com.plusmobileapps.clock.main
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
+import android.view.View
+import android.widget.FrameLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
+import com.plusmobileapps.clock.di.ViewModelFactory
+import javax.inject.Inject
 
 enum class BottomNav {
     ALARM, TIMER, STOPWATCH
@@ -12,61 +25,62 @@ enum class BottomNav {
 
 class MainActivity() : AppCompatActivity() {
 
-    private val navigation by lazy {
-        findViewById<BottomNavigationView>(R.id.navigation)
-    }
+    private val coordinatorLayout by lazy { findViewById<CoordinatorLayout>(R.id.coordinator) }
 
-    private val viewPager by lazy {
-        findViewById<ViewPager>(R.id.view_pager)
-    }
+    private val appBar by lazy { findViewById<BottomAppBar>(R.id.bottomAppBar) }
+
+    private lateinit var bottomDrawerBehavior: BottomSheetBehavior<View>
+
+    private val fab by lazy { findViewById<FloatingActionButton>(R.id.floatingActionButton) }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val alarmViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MyApplication.appComponent.inject(this)
         setContentView(R.layout.activity_main)
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        viewPager.apply {
-            adapter = MainSwipeAdapter(supportFragmentManager)
-            addOnPageChangeListener(pageChangeListener)
+        setSupportActionBar(appBar)
+        setupBottomDrawer()
+        fab.setOnClickListener {
+            alarmViewModel.showTimePicker()
         }
+
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-
-    private fun changePage(position: Int) {
-        viewPager.currentItem = position
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        Snackbar.make(coordinatorLayout, item?.title ?: "", Snackbar.LENGTH_LONG).show()
+        return true
     }
 
-    private fun changeNavHighlight(itemId: Int) {
-        navigation.selectedItemId = itemId
+    private fun setupBottomDrawer() {
+        val bottomDrawer = findViewById<FrameLayout>(R.id.bottom_drawer)
+        bottomDrawerBehavior = BottomSheetBehavior.from(bottomDrawer)
+        bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        appBar.setNavigationOnClickListener{
+            bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
     }
 
     /**
      * Handle Listeners
      */
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private val mOnNavigationItemSelectedListener = com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_alarm -> {
-                changePage(BottomNav.ALARM.ordinal)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_timer -> {
-                changePage(BottomNav.TIMER.ordinal)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_stopwatch -> {
-                changePage(BottomNav.STOPWATCH.ordinal)
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
 
-    private val pageChangeListener = object:ViewPager.OnPageChangeListener {
-
-        override fun onPageScrollStateChanged(state: Int) {}
-
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-        override fun onPageSelected(position: Int) = changeNavHighlight(position)
-
-    }
 }
