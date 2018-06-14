@@ -49,4 +49,8 @@ class AlarmLandingViewModel @Inject constructor(private val alarmRepository: Ala
         showTimePickerToggle.value = true
     }
 
+    fun deleteAlarm(alarm: Alarm) {
+        alarmRepository.deleteAlarm(alarm)
+    }
+
 }

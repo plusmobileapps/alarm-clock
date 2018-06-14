@@ -1,6 +1,7 @@
 package com.plusmobileapps.clock.alarm.landing
 
 import android.app.TimePickerDialog
+import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -10,7 +11,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SimpleAdapter
 import android.widget.TimePicker
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.R
@@ -32,8 +35,10 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
     }
 
     private val recyclerView by lazy {
-        activity?.findViewById<RecyclerView>(R.id.recycler_view)
+        mView.findViewById<RecyclerView>(R.id.recycler_view)
     }
+
+    private lateinit var mView: View
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -66,7 +71,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
         }
     }
     private val alarmAdapter by lazy {
-        AlarmAdapter(listOf(), itemListener)
+        AlarmAdapter(itemListener)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,9 +82,17 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(AlarmLandingViewModel::class.java)
-        recyclerView?.apply {
+        recyclerView.apply {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
             adapter = alarmAdapter
+        }
+        val swipeHandler = object : SwipeToDeleteCallback(mView.context) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if (viewHolder is AlarmAdapter.AlarmViewHolder) viewModel.deleteAlarm(viewHolder.mAlarm)
+            }
+        }
+        ItemTouchHelper(swipeHandler).apply {
+            attachToRecyclerView(recyclerView)
         }
         subscribeToAlarmList()
         subscribeToShowingTimePicker();
@@ -87,17 +100,14 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_alarm, container, false)
+        val view = inflater.inflate(R.layout.fragment_alarm, container, false)
+        mView = view
+        return view
     }
 
     private fun subscribeToAlarmList() {
         val alarmsObserver = Observer<List<Alarm>>() {
-            if(it != null){
-                alarmAdapter.apply {
-                    alarms = it
-                    notifyDataSetChanged()
-                }
-            }
+            if(it != null) alarmAdapter.submitList(it)
         }
         viewModel.getAlarms().observe(this, alarmsObserver)
     }
