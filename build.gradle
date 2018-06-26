@@ -3,6 +3,7 @@
 ext {
     //keep all versions in one place for easy updates across modules
     ext.minSdkVersion = 21
+    ext.compileSdkVersion = 'android-P'
     ext.targetSdkVersion = 27
     ext.versionCode = 1
     ext.versionName = '1.0'
