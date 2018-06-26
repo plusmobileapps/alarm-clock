@@ -22,7 +22,8 @@ buildscript {
     ext.daggerVersion = '2.15'
     ext.navigationVersion = '1.0.0-alpha02'
     ext.gradlePlugin = '3.2.0-alpha18'
-    ext.firebaseVersion = '16.0.1'
+    ext.firebaseCoreVersion = '16.0.1'
+    ext.firebaseAuthVersion = '4.0.0'
 
     ext.junitVersion = '4.12'
     ext.testRunnerVersion = '1.1.0-alpha3'

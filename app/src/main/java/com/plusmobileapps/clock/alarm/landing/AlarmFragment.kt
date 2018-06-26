@@ -11,11 +11,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.SimpleAdapter
 import android.widget.TimePicker
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
@@ -39,6 +41,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
     }
 
     private lateinit var mView: View
+    private val firbaseAuthHelper by lazy { FirebaseAuthHelper() }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -102,7 +105,15 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_alarm, container, false)
         mView = view
+        mView.findViewById<Button>(R.id.auth_button).setOnClickListener {
+            firbaseAuthHelper.startAuth(this)
+        }
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        firbaseAuthHelper.handleResult(requestCode, resultCode, data)
     }
 
     private fun subscribeToAlarmList() {
@@ -119,9 +130,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
                     showTimePicker(null, null, addAlarmTimeListener)
                     viewModel.showTimePickerToggle.value = false
                 }
-                false -> {
-                    Log.d("WTF", "disabled")
-                }
+                false -> { Log.d("WTF", "disabled") }
             }
         }
         viewModel.showTimePickerToggle.observe(this, observer)

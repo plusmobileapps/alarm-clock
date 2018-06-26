@@ -1,6 +1,7 @@
 package com.plusmobileapps.clock.di
 
 import android.app.Application
+import android.content.Context
 import com.plusmobileapps.clock.MyApplication
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,8 @@ class AppModule (private val application: MyApplication) {
 
     @Provides
     fun providesApplication(): Application = application
+
+    @Provides
+    fun providesApplicationContext(): Context = application.applicationContext
 
 }
