@@ -24,5 +24,9 @@
     <string name="short_saturday">S</string>
     <string name="short_sunday">Su</string>
 
+    <string name="sign_on">Sign on</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_out_successful">You have been successfully signed out.</string>
+
 
 </resources>

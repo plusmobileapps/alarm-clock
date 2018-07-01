@@ -31,6 +31,10 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:$jetpackVersion"
     implementation "androidx.cardview:cardview:$jetpackVersion"
 
+    implementation "org.jetbrains.anko:anko:$anko_version"
+
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
+
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"

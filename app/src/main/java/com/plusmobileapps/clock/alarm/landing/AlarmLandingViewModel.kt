@@ -2,13 +2,18 @@ package com.plusmobileapps.clock.alarm.landing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.plusmobileapps.clock.FirebaseAuthHelper
+import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.data.AlarmRepository
 import com.plusmobileapps.clock.data.entities.Alarm
 import javax.inject.Inject
 
 
-class AlarmLandingViewModel @Inject constructor(private val alarmRepository: AlarmRepository): ViewModel() {
+class AlarmLandingViewModel @Inject constructor(
+        private val alarmRepository: AlarmRepository,
+        val firebaseAuthHelper: FirebaseAuthHelper): ViewModel() {
 
     private val alarms: LiveData<List<Alarm>> = alarmRepository.getAlarms()
     val showTimePickerToggle = MutableLiveData<Boolean>()
@@ -35,7 +40,6 @@ class AlarmLandingViewModel @Inject constructor(private val alarmRepository: Ala
     }
 
     fun updateAlarm(alarm: Alarm) = alarmRepository.saveAlarm(alarm)
-
 
     fun updateAlarmToggle(enabled: Boolean, position: Int) {
         if (alarms.value != null) {

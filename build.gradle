@@ -12,6 +12,7 @@ ext {
 buildscript {
 
     ext.kotlin_version = '1.2.50'
+    ext.anko_version='0.10.5'
     ext.jetpackVersion = '1.0.0-alpha3'
     ext.googleServicesVersion ='4.0.1'
     ext.materialVersion = '1.0.0-alpha3'
@@ -24,6 +25,7 @@ buildscript {
     ext.gradlePlugin = '3.2.0-alpha18'
     ext.firebaseCoreVersion = '16.0.1'
     ext.firebaseAuthVersion = '4.0.0'
+    ext.picassoVersion = '2.71828'
 
     ext.junitVersion = '4.12'
     ext.testRunnerVersion = '1.1.0-alpha3'
@@ -34,7 +36,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradlePlugin"
+        classpath "com.android.tools.build:gradle:3.2.0-beta02"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$googleServicesVersion"
 

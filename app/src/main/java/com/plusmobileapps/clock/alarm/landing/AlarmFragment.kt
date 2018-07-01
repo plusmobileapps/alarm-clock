@@ -41,7 +41,6 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
     }
 
     private lateinit var mView: View
-    private val firbaseAuthHelper by lazy { FirebaseAuthHelper() }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -98,22 +97,14 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
             attachToRecyclerView(recyclerView)
         }
         subscribeToAlarmList()
-        subscribeToShowingTimePicker();
+        subscribeToShowingTimePicker()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_alarm, container, false)
         mView = view
-        mView.findViewById<Button>(R.id.auth_button).setOnClickListener {
-            firbaseAuthHelper.startAuth(this)
-        }
         return view
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        firbaseAuthHelper.handleResult(requestCode, resultCode, data)
     }
 
     private fun subscribeToAlarmList() {
