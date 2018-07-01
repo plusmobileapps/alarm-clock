@@ -54,6 +54,8 @@ dependencies {
     //Firebase
     implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
     implementation "com.firebaseui:firebase-ui-auth:$firebaseAuthVersion"
+    implementation "com.google.firebase:firebase-messaging:$firebaseMessagingVersion"
+
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"

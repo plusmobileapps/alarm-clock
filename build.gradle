@@ -25,6 +25,7 @@ buildscript {
     ext.gradlePlugin = '3.2.0-alpha18'
     ext.firebaseCoreVersion = '16.0.1'
     ext.firebaseAuthVersion = '4.0.0'
+    ext.firebaseMessagingVersion = '17.1.0'
     ext.picassoVersion = '2.71828'
 
     ext.junitVersion = '4.12'
