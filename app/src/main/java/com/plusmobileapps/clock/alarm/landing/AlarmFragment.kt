@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SimpleAdapter
 import android.widget.TimePicker
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,8 +22,10 @@ import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
+import com.plusmobileapps.clock.autoCleared
 import com.plusmobileapps.clock.data.entities.Alarm
 import com.plusmobileapps.clock.di.ViewModelFactory
+import org.jetbrains.anko.bundleOf
 import java.util.*
 import javax.inject.Inject
 
@@ -51,9 +54,8 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
         override fun alarmItemClicked(position: Int) {
             val id = viewModel.getAlarmId(position)
             id?.let {
-                val intent = Intent(context, AlarmDetailActivity::class.java)
-                intent.putExtra(EXTRA_ALARM_ID, it)
-                startActivity(intent)
+                val bundle = bundleOf(EXTRA_ALARM_ID to it)
+                view?.findNavController()?.navigate(R.id.alarmDetailFragment, bundle)
             }
         }
 
@@ -72,18 +74,20 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
             viewModel.updateAlarmToggle(isEnabled, position)
         }
     }
-    private val alarmAdapter by lazy {
-        AlarmAdapter(itemListener)
-    }
+    private var alarmAdapter by autoCleared<AlarmAdapter>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MyApplication.appComponent.inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(AlarmLandingViewModel::class.java)
+        MyApplication.appComponent.inject(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java)
+        val rvAdapter = AlarmAdapter(itemListener)
+        alarmAdapter = rvAdapter
+
         recyclerView.apply {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
             adapter = alarmAdapter

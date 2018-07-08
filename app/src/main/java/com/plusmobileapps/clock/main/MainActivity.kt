@@ -11,9 +11,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.plusmobileapps.clock.MyApplication
@@ -38,6 +40,8 @@ class MainActivity() : AppCompatActivity() {
     private val signOnButton by lazy { findViewById<Button>(R.id.sign_on_button) }
     private val signOffButton by lazy { findViewById<Button>(R.id.sign_out_button) }
     private val profileImage by lazy { findViewById<ImageView>(R.id.profile_image) }
+    private val navigationView by lazy { findViewById<NavigationView>(R.id.navigation_view) }
+    private val navigator by lazy { findNavController(R.id.nav_host_fragment) }
 
 
     private lateinit var bottomDrawerBehavior: BottomSheetBehavior<View>
@@ -63,7 +67,7 @@ class MainActivity() : AppCompatActivity() {
             })
         }
         if (FirebaseAuth.getInstance().currentUser != null) setupAuthenticatedState() else setupUnauthenticatedState()
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     private fun setupAuthenticatedState() {
@@ -96,6 +100,8 @@ class MainActivity() : AppCompatActivity() {
         if (authenticated) setupAuthenticatedState() else setupUnauthenticatedState()
     }
 
+    override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
+
     private fun setupBottomDrawer() {
         val bottomDrawer = findViewById<ConstraintLayout>(R.id.constraint_layout)
         bottomDrawerBehavior = BottomSheetBehavior.from(bottomDrawer)
@@ -108,15 +114,18 @@ class MainActivity() : AppCompatActivity() {
     /**
      * Handle Listeners
      */
-    private val mOnNavigationItemSelectedListener = com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_alarm -> {
+                navigator.navigate(R.id.alarmFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_timer -> {
+                navigator.navigate(R.id.timerFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_stopwatch -> {
+                navigator.navigate(R.id.stopwatchFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }

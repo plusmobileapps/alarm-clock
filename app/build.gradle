@@ -37,6 +37,7 @@ dependencies {
 
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 
     //Room Library
@@ -44,8 +45,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
 
     //navigation component
-    implementation "android.arch.navigation:navigation-fragment:$navigationVersion"
-    implementation "android.arch.navigation:navigation-ui:$navigationVersion"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
     //Dependency Injection
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -62,3 +63,4 @@ dependencies {
 
 //This needs to be at the bottom so gradle doesn't complain
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'

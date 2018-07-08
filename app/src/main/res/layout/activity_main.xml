@@ -6,10 +6,13 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/mainImagesList"
-        android:name="com.plusmobileapps.clock.alarm.landing.AlarmFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"
+        />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -18,6 +21,8 @@
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_drawer_menu_24px"
         android:layout_gravity="bottom"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
