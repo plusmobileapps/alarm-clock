@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,6 +22,7 @@ import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.util.CircleTransform
+import com.plusmobileapps.clock.util.requiresGooglePlayServices
 import com.plusmobileapps.clock.util.showOrGone
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.toast
@@ -54,7 +56,11 @@ class MainActivity() : AppCompatActivity() {
         setSupportActionBar(appBar)
         setupBottomDrawer()
         fab.setOnClickListener { alarmViewModel.showTimePicker() }
-        signOnButton.setOnClickListener { alarmViewModel.firebaseAuthHelper.startAuth(this) }
+        signOnButton.setOnClickListener {
+            requiresGooglePlayServices(this) {
+                alarmViewModel.firebaseAuthHelper.startAuth(this)
+            }
+        }
 
         signOffButton.setOnClickListener {
             alarmViewModel.firebaseAuthHelper.signOut(this).observe(this, Observer {
