@@ -3,8 +3,8 @@
 ext {
     //keep all versions in one place for easy updates across modules
     ext.minSdkVersion = 21
-    ext.compileSdkVersion = 'android-P'
-    ext.targetSdkVersion = 27
+    ext.compileSdkVersion = 28
+    ext.targetSdkVersion = 28
     ext.versionCode = 1
     ext.versionName = '1.0'
 }
@@ -36,7 +36,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.2.0-beta02"
+        classpath 'com.android.tools.build:gradle:3.2.0-beta03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$googleServicesVersion"
 
