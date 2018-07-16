@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/mainImagesList"
+        android:id="@+id/fragment_container"
         android:name="com.plusmobileapps.clock.alarm.landing.AlarmFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

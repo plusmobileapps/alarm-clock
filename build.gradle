@@ -27,6 +27,8 @@ buildscript {
     ext.firebaseAuthVersion = '4.0.0'
     ext.picassoVersion = '2.71828'
 
+    ext.fragmentKtxVersion = '1.0.0-alpha1'
+
     ext.junitVersion = '4.12'
     ext.testRunnerVersion = '1.1.0-alpha3'
     ext.espressoVersion = '3.1.0-alpha3'

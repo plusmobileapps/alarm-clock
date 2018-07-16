@@ -9,24 +9,31 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.alarm.landing.AlarmFragment
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
+import com.plusmobileapps.clock.stopwatch.StopwatchFragment
+import com.plusmobileapps.clock.timer.TimerFragment
 import com.plusmobileapps.clock.util.CircleTransform
 import com.plusmobileapps.clock.util.requiresGooglePlayServices
 import com.plusmobileapps.clock.util.showOrGone
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.toast
 import javax.inject.Inject
+import kotlin.concurrent.timer
 
 enum class BottomNav {
     ALARM, TIMER, STOPWATCH
@@ -41,13 +48,13 @@ class MainActivity() : AppCompatActivity() {
     private val signOffButton by lazy { findViewById<Button>(R.id.sign_out_button) }
     private val profileImage by lazy { findViewById<ImageView>(R.id.profile_image) }
 
-
     private lateinit var bottomDrawerBehavior: BottomSheetBehavior<View>
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     private val alarmViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java) }
+    private val mainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +76,35 @@ class MainActivity() : AppCompatActivity() {
             })
         }
         if (FirebaseAuth.getInstance().currentUser != null) setupAuthenticatedState() else setupUnauthenticatedState()
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        findViewById<NavigationView>(R.id.navigation_view).setNavigationItemSelectedListener {
+            mainActivityViewModel.navigationClicked(it.itemId)
+        }
+
+        mainActivityViewModel.getViewStateLiveData().observe(this, Observer {
+            it?.let {
+                val fragment = when(it) {
+                    MainActivityViewState.Alarm -> AlarmFragment.newInstance()
+                    MainActivityViewState.StopWatch -> StopwatchFragment.newInstance()
+                    MainActivityViewState.Timer -> TimerFragment.newInstance()
+                }
+                supportFragmentManager.transaction {
+                    replace(R.id.fragment_container, fragment)
+                }
+            }
+        })
+    }
+
+    private fun openAlarm() {
+
+    }
+
+    private fun openTimer() {
+
+    }
+
+    private fun openStopWatch() {
+
     }
 
     private fun setupAuthenticatedState() {
@@ -114,19 +149,23 @@ class MainActivity() : AppCompatActivity() {
     /**
      * Handle Listeners
      */
-    private val mOnNavigationItemSelectedListener = com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_alarm -> {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_timer -> {
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_stopwatch -> {
+                supportFragmentManager.transaction {
+                    replace(R.id.fragment_container, StopwatchFragment.newInstance())
+                }
                 return@OnNavigationItemSelectedListener true
             }
+            else -> false
         }
-        false
     }
 
 }
