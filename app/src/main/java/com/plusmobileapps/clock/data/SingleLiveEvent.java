@@ -57,7 +57,8 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
                     observer.onChanged(t);
                 }
             }
-        });    }
+        });
+    }
 
 
     @MainThread

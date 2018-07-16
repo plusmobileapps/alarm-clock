@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.data.AlarmRepository
+import com.plusmobileapps.clock.data.SingleLiveEvent
 import com.plusmobileapps.clock.data.entities.Alarm
 import javax.inject.Inject
 
@@ -16,21 +17,13 @@ class AlarmLandingViewModel @Inject constructor(
         val firebaseAuthHelper: FirebaseAuthHelper): ViewModel() {
 
     private val alarms: LiveData<List<Alarm>> = alarmRepository.getAlarms()
-    val showTimePickerToggle = MutableLiveData<Boolean>()
-
-    init {
-        showTimePickerToggle.value = false
-    }
+    val showTimePickerToggle = SingleLiveEvent<Unit>()
 
     fun getAlarms(): LiveData<List<Alarm>> = alarms
 
-    fun getAlarm(position: Int): Alarm? {
-        return alarms.value?.get(position)
-    }
+    fun getAlarm(position: Int): Alarm? = alarms.value?.get(position)
 
-    fun getAlarmId(position: Int): Int? {
-        return alarms.value?.get(position)?.id
-    }
+    fun getAlarmId(position: Int): Int? = alarms.value?.get(position)?.id
 
     fun getAlarmById(id: Int): LiveData<Alarm> = alarmRepository.getAlarm(id)
 
@@ -42,19 +35,15 @@ class AlarmLandingViewModel @Inject constructor(
     fun updateAlarm(alarm: Alarm) = alarmRepository.saveAlarm(alarm)
 
     fun updateAlarmToggle(enabled: Boolean, position: Int) {
-        if (alarms.value != null) {
-            val alarm = alarms.value!![position]
+        alarms.value?.let {
+            val alarm = it[position]
             alarm.enabled = enabled
             alarmRepository.saveAlarm(alarm)
         }
     }
 
-    fun showTimePicker() {
-        showTimePickerToggle.value = true
-    }
+    fun showTimePicker() = showTimePickerToggle.call()
 
-    fun deleteAlarm(alarm: Alarm) {
-        alarmRepository.deleteAlarm(alarm)
-    }
+    fun deleteAlarm(alarm: Alarm) = alarmRepository.deleteAlarm(alarm)
 
 }

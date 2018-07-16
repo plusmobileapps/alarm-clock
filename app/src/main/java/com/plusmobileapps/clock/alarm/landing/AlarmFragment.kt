@@ -115,16 +115,9 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
     }
 
     private fun subscribeToShowingTimePicker() {
-        val observer = Observer<Boolean> {
-            when (it) {
-                true -> {
-                    showTimePicker(null, null, addAlarmTimeListener)
-                    viewModel.showTimePickerToggle.value = false
-                }
-                false -> { Log.d("WTF", "disabled") }
-            }
-        }
-        viewModel.showTimePickerToggle.observe(this, observer)
+        viewModel.showTimePickerToggle.observe(this, Observer {
+            showTimePicker(null, null, addAlarmTimeListener)
+        })
     }
 
     private fun showTimePicker(startHour: Int?, startMin: Int?, timeListener: TimePickerDialog.OnTimeSetListener) {
