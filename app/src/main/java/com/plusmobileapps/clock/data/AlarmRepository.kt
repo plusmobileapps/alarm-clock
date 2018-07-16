@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.plusmobileapps.clock.data.daos.AlarmDao
 import com.plusmobileapps.clock.data.entities.Alarm
 import com.plusmobileapps.clock.ioThread
+import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
 class AlarmRepository @Inject constructor(private val alarmDao: AlarmDao): AlarmDataSource {
@@ -17,14 +18,10 @@ class AlarmRepository @Inject constructor(private val alarmDao: AlarmDao): Alarm
     }
 
     override fun saveAlarm(alarm: Alarm) {
-        ioThread {
-            alarmDao.insert(alarm)
-        }
+        doAsync { alarmDao.insert(alarm) }
     }
 
     override fun deleteAlarm(alarm: Alarm) {
-        ioThread {
-            alarmDao.delete(alarm)
-        }
+        doAsync { alarmDao.delete(alarm) }
     }
 }

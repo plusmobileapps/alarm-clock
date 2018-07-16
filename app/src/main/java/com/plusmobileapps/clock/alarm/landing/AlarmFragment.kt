@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.SimpleAdapter
 import android.widget.TimePicker
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.FirebaseAuthHelper
@@ -85,7 +86,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(AlarmLandingViewModel::class.java)
         recyclerView.apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = alarmAdapter
         }
         val swipeHandler = object : SwipeToDeleteCallback(mView.context) {
@@ -107,12 +108,12 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
         return view
     }
 
-    private fun subscribeToAlarmList() {
-        val alarmsObserver = Observer<List<Alarm>>() {
-            if(it != null) alarmAdapter.submitList(it)
-        }
-        viewModel.getAlarms().observe(this, alarmsObserver)
-    }
+    private fun subscribeToAlarmList() = viewModel.getAlarms().observe(this, Observer {
+            it?.let {
+                alarmAdapter.submitList(it)
+            }
+        })
+
 
     private fun subscribeToShowingTimePicker() {
         viewModel.showTimePickerToggle.observe(this, Observer {
@@ -128,9 +129,8 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
         dialog.show()
     }
 
-    private val addAlarmTimeListener = TimePickerDialog.OnTimeSetListener { _: TimePicker, hour: Int, min: Int ->
+    private val addAlarmTimeListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
         viewModel.addAlarm(hour, min)
     }
-
 
 }
