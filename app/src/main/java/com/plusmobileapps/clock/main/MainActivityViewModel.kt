@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.data.SingleLiveEvent
 import javax.inject.Inject
 
 sealed class MainActivityViewState {
@@ -14,7 +15,11 @@ sealed class MainActivityViewState {
 
 class MainActivityViewModel @Inject constructor() : ViewModel() {
 
-    private val viewState = MutableLiveData<MainActivityViewState>()
+    private val viewState = MutableLiveData<MainActivityViewState>().apply {
+        value = MainActivityViewState.Alarm
+    }
+
+    val closeBottomDrawer = SingleLiveEvent<Unit>()
 
     fun getViewStateLiveData() : LiveData<MainActivityViewState> {
         return viewState
@@ -43,7 +48,7 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
         if (request != currentViewState) {
             viewState.value = request
         }
+        closeBottomDrawer.call()
     }
-
 
 }

@@ -93,6 +93,10 @@ class MainActivity() : AppCompatActivity() {
                 }
             }
         })
+
+        mainActivityViewModel.closeBottomDrawer.observe(this, Observer {
+            bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        })
     }
 
     private fun openAlarm() {
@@ -111,8 +115,7 @@ class MainActivity() : AppCompatActivity() {
         profileImage.showOrGone(true)
         signOffButton.showOrGone(true)
         signOnButton.showOrGone(false)
-        val photoUrl = FirebaseAuth.getInstance().currentUser?.photoUrl
-        photoUrl?.let {
+        FirebaseAuth.getInstance().currentUser?.photoUrl?.let {
             Picasso.get()
                     .load(it)
                     .transform(CircleTransform())
