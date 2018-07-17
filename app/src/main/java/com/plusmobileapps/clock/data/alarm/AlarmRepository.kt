@@ -1,12 +1,11 @@
-package com.plusmobileapps.clock.data
+package com.plusmobileapps.clock.data.alarm
 
 import androidx.lifecycle.LiveData
-import com.plusmobileapps.clock.data.daos.AlarmDao
-import com.plusmobileapps.clock.data.entities.Alarm
-import com.plusmobileapps.clock.ioThread
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AlarmRepository @Inject constructor(private val alarmDao: AlarmDao): AlarmDataSource {
 
     override fun getAlarms(): LiveData<List<Alarm>> {

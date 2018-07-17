@@ -1,14 +1,11 @@
 package com.plusmobileapps.clock.alarm.landing
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.FirebaseAuthHelper
-import com.plusmobileapps.clock.MyApplication
-import com.plusmobileapps.clock.data.AlarmRepository
-import com.plusmobileapps.clock.data.SingleLiveEvent
-import com.plusmobileapps.clock.data.entities.Alarm
+import com.plusmobileapps.clock.data.alarm.AlarmRepository
+import com.plusmobileapps.clock.SingleLiveEvent
+import com.plusmobileapps.clock.data.alarm.Alarm
 import javax.inject.Inject
 
 

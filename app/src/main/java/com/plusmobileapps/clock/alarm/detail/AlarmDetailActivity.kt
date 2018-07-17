@@ -10,7 +10,7 @@ import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.alarm.landing.EXTRA_ALARM_ID
-import com.plusmobileapps.clock.data.entities.Alarm
+import com.plusmobileapps.clock.data.alarm.Alarm
 import com.plusmobileapps.clock.di.ViewModelFactory
 import javax.inject.Inject
 

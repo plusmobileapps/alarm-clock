@@ -27,6 +27,7 @@ import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.stopwatch.StopwatchFragment
 import com.plusmobileapps.clock.timer.TimerFragment
+import com.plusmobileapps.clock.timer.TimerViewModel
 import com.plusmobileapps.clock.util.CircleTransform
 import com.plusmobileapps.clock.util.requiresGooglePlayServices
 import com.plusmobileapps.clock.util.showOrGone
@@ -54,6 +55,7 @@ class MainActivity() : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private val alarmViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java) }
+    private val timerViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(TimerViewModel::class.java) }
     private val mainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +64,15 @@ class MainActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(appBar)
         setupBottomDrawer()
-        fab.setOnClickListener { alarmViewModel.showTimePicker() }
+        fab.setOnClickListener {
+            val viewState = mainActivityViewModel.getViewStateLiveData().value
+            when(viewState) {
+                MainActivityViewState.Alarm -> alarmViewModel.showTimePicker()
+                MainActivityViewState.Timer -> timerViewModel.timerAddClicked()
+                else -> Unit
+            }
+
+        }
         signOnButton.setOnClickListener {
             requiresGooglePlayServices(this) {
                 alarmViewModel.firebaseAuthHelper.startAuth(this)
@@ -97,18 +107,6 @@ class MainActivity() : AppCompatActivity() {
         mainActivityViewModel.closeBottomDrawer.observe(this, Observer {
             bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         })
-    }
-
-    private fun openAlarm() {
-
-    }
-
-    private fun openTimer() {
-
-    }
-
-    private fun openStopWatch() {
-
     }
 
     private fun setupAuthenticatedState() {

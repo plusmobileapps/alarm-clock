@@ -1,8 +1,7 @@
-package com.plusmobileapps.clock.data
+package com.plusmobileapps.clock.data.alarm
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.plusmobileapps.clock.data.entities.Alarm
+import com.plusmobileapps.clock.data.alarm.Alarm
 
 interface AlarmDataSource {
     fun getAlarms(): LiveData<List<Alarm>>

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.R
-import com.plusmobileapps.clock.data.SingleLiveEvent
+import com.plusmobileapps.clock.SingleLiveEvent
 import javax.inject.Inject
 
 sealed class MainActivityViewState {

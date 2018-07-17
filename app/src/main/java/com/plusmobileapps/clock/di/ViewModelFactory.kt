@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.main.MainActivityViewModel
+import com.plusmobileapps.clock.timer.TimerViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
-import javax.inject.Provider
 import dagger.multibindings.IntoMap
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 import kotlin.reflect.KClass
 
@@ -40,6 +41,9 @@ abstract class ViewModelModule {
     @ViewModelKey(MainActivityViewModel::class)
     internal abstract fun mainActivityViewModel(viewModel: MainActivityViewModel): ViewModel
 
-    //Add more ViewModels here
+    @Binds
+    @IntoMap
+    @ViewModelKey(TimerViewModel::class)
+    internal abstract fun timerViewModel(viewModel: TimerViewModel): ViewModel
 }
 

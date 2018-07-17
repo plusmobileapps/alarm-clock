@@ -28,5 +28,7 @@
     <string name="sign_out">Sign out</string>
     <string name="sign_out_successful">You have been successfully signed out.</string>
 
+    <string name="reset">Reset</string>
+
 
 </resources>
