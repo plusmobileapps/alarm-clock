@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +16,11 @@ import com.plusmobileapps.clock.di.ViewModelFactory
 import org.jetbrains.anko.toast
 import javax.inject.Inject
 
+interface TimerPickerActivityCallback {
+    fun onTimerStarted(seconds: Int, minutes: Int, hours: Int)
+}
 
-class TimerFragment : androidx.fragment.app.Fragment() {
+class TimerFragment : Fragment() {
 
     companion object {
         fun newInstance() = TimerFragment()
@@ -26,9 +30,7 @@ class TimerFragment : androidx.fragment.app.Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-
     private lateinit var viewModel: TimerViewModel
-
     private val recyclerView by lazy { mView.findViewById<RecyclerView>(R.id.recycler_view) }
 
     private val itemListener = object : TimerItemListener {
@@ -66,7 +68,10 @@ class TimerFragment : androidx.fragment.app.Fragment() {
 
     private fun subscribeToAddTimerClick() {
         viewModel.timerClicked.observe(this, Observer {
-            viewModel.addTimer()
+            fragmentManager?.let {
+                val dialog = TimerPickerDialogFragment()
+                dialog.show(fragmentManager, TimerPickerDialogFragment.TAG)
+            }
         })
     }
 

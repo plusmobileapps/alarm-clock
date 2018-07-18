@@ -14,7 +14,9 @@ class TimerViewModel @Inject constructor(private val timerRepository: TimerRepos
 
     fun timerAddClicked() = timerClicked.call()
 
-    fun addTimer() = timerRepository.saveTimer(Timer(startTimeMillis = 1000, currentTimeLeftMillis = 1000))
+    fun addTimer(seconds: Int, minutes: Int, hours: Int) {
+        timerRepository.saveTimer(Timer(startTimeMillis = 1000, currentTimeLeftMillis = 1000))
+    }
 
     fun deleteTimer(position: Int) {
         timers.value?.let {
