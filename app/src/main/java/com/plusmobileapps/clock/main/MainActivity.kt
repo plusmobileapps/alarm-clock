@@ -173,4 +173,10 @@ class MainActivity() : AppCompatActivity(), TimerPickerDialogFragment.TimerPicke
     override fun onTimerStarted(seconds: Int, minutes: Int, hours: Int) {
         timerViewModel.addTimer(seconds, minutes, hours)
     }
+
+    fun numberClicked(view: View) {
+        if (view is Button) {
+            timerViewModel.numberClicked(view.text.toString())
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.plusmobileapps.clock.timer
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.SingleLiveEvent
 import com.plusmobileapps.clock.data.timer.Timer
@@ -11,6 +12,10 @@ class TimerViewModel @Inject constructor(private val timerRepository: TimerRepos
 
     val timers: LiveData<List<Timer>> = timerRepository.getTimers()
     val timerClicked = SingleLiveEvent<Unit>()
+    private val timePickerTime = MutableLiveData<String>()
+    private val time = 0
+
+    fun getTimePickerTime() : LiveData<String> = timePickerTime
 
     fun timerAddClicked() = timerClicked.call()
 
@@ -37,5 +42,10 @@ class TimerViewModel @Inject constructor(private val timerRepository: TimerRepos
         timers.value?.let {
             val timer = it[position]
         }
+    }
+
+    fun numberClicked(number: String) {
+        val digit = number.toInt()
+
     }
 }
