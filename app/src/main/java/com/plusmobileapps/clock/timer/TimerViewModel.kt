@@ -31,9 +31,7 @@ class TimerViewModel @Inject constructor(private val timerRepository: TimerRepos
 
     fun resetTimer(position: Int) {
         timers.value?.let {
-            val timer = it[position].apply {
-                resetTimer()
-            }
+            val timer = it[position].apply { resetTimer() }
             timerRepository.saveTimer(timer)
         }
     }
