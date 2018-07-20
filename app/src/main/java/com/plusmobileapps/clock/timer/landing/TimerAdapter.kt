@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock.timer
+package com.plusmobileapps.clock.timer.landing
 
 import android.view.LayoutInflater
 import android.view.View

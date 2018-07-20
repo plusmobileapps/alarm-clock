@@ -26,22 +26,22 @@ import com.plusmobileapps.clock.alarm.landing.AlarmFragment
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.stopwatch.StopwatchFragment
-import com.plusmobileapps.clock.timer.TimerFragment
+import com.plusmobileapps.clock.timer.landing.TimerFragment
 import com.plusmobileapps.clock.timer.TimerPickerDialogFragment
-import com.plusmobileapps.clock.timer.TimerViewModel
+import com.plusmobileapps.clock.timer.landing.TimerViewModel
+import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
 import com.plusmobileapps.clock.util.CircleTransform
 import com.plusmobileapps.clock.util.requiresGooglePlayServices
 import com.plusmobileapps.clock.util.showOrGone
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.toast
 import javax.inject.Inject
-import kotlin.concurrent.timer
 
 enum class BottomNav {
     ALARM, TIMER, STOPWATCH
 }
 
-class MainActivity() : AppCompatActivity(), TimerPickerDialogFragment.TimerPickerDialogListener {
+class MainActivity() : AppCompatActivity(), TimerPickerFragment.TimerPickerDialogListener {
 
     private val coordinatorLayout by lazy { findViewById<CoordinatorLayout>(R.id.coordinator) }
     private val appBar by lazy { findViewById<BottomAppBar>(R.id.bottomAppBar) }

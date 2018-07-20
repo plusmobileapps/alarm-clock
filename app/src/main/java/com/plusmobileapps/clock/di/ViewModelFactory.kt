@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.main.MainActivityViewModel
-import com.plusmobileapps.clock.timer.TimerViewModel
+import com.plusmobileapps.clock.timer.landing.TimerViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

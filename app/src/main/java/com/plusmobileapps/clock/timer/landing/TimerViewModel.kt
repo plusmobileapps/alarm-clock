@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock.timer
+package com.plusmobileapps.clock.timer.landing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

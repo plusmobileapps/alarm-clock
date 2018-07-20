@@ -65,3 +65,4 @@ dependencies {
 
 //This needs to be at the bottom so gradle doesn't complain
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'

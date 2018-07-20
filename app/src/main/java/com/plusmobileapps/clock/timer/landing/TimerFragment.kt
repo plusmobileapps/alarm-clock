@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock.timer
+package com.plusmobileapps.clock.timer.landing
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.di.ViewModelFactory
-import org.jetbrains.anko.toast
+import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
 import javax.inject.Inject
 
 interface TimerPickerActivityCallback {
@@ -68,9 +69,8 @@ class TimerFragment : Fragment() {
 
     private fun subscribeToAddTimerClick() {
         viewModel.timerClicked.observe(this, Observer {
-            fragmentManager?.let {
-                val dialog = TimerPickerDialogFragment()
-                dialog.show(fragmentManager, TimerPickerDialogFragment.TAG)
+            fragmentManager?.transaction {
+                replace(R.id.fragment_container, TimerPickerFragment.newInstance())
             }
         })
     }
