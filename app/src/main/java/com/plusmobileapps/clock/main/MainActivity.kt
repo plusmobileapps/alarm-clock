@@ -9,11 +9,9 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,9 +25,8 @@ import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.stopwatch.StopwatchFragment
 import com.plusmobileapps.clock.timer.landing.TimerFragment
-import com.plusmobileapps.clock.timer.TimerPickerDialogFragment
 import com.plusmobileapps.clock.timer.landing.TimerViewModel
-import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
+import com.plusmobileapps.clock.timer.picker.TimerPickerViewModel
 import com.plusmobileapps.clock.util.CircleTransform
 import com.plusmobileapps.clock.util.requiresGooglePlayServices
 import com.plusmobileapps.clock.util.showOrGone
@@ -41,7 +38,7 @@ enum class BottomNav {
     ALARM, TIMER, STOPWATCH
 }
 
-class MainActivity() : AppCompatActivity(), TimerPickerFragment.TimerPickerDialogListener {
+class MainActivity() : AppCompatActivity() {
 
     private val coordinatorLayout by lazy { findViewById<CoordinatorLayout>(R.id.coordinator) }
     private val appBar by lazy { findViewById<BottomAppBar>(R.id.bottomAppBar) }
@@ -57,6 +54,7 @@ class MainActivity() : AppCompatActivity(), TimerPickerFragment.TimerPickerDialo
 
     private val alarmViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java) }
     private val timerViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(TimerViewModel::class.java) }
+    private val timerPickerViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(TimerPickerViewModel::class.java) }
     private val mainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -170,13 +168,9 @@ class MainActivity() : AppCompatActivity(), TimerPickerFragment.TimerPickerDialo
         }
     }
 
-    override fun onTimerStarted(seconds: Int, minutes: Int, hours: Int) {
-        timerViewModel.addTimer(seconds, minutes, hours)
-    }
-
-    fun numberClicked(view: View) {
+    fun setTimerNumberClicked(view: View) {
         if (view is Button) {
-            timerViewModel.numberClicked(view.text.toString())
+            timerPickerViewModel.onNumberClicked(view.text.toString())
         }
     }
 }

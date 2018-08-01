@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.main.MainActivityViewModel
 import com.plusmobileapps.clock.timer.landing.TimerViewModel
+import com.plusmobileapps.clock.timer.picker.TimerPickerViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -45,5 +46,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TimerViewModel::class)
     internal abstract fun timerViewModel(viewModel: TimerViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TimerPickerViewModel::class)
+    internal abstract fun timerPickerViewModel(viewmodel: TimerPickerViewModel): ViewModel
 }
 
