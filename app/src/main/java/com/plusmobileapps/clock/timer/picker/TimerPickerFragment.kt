@@ -19,6 +19,10 @@ import javax.inject.Inject
 
 class TimerPickerFragment : Fragment() {
 
+    companion object {
+        fun newInstance() = TimerPickerFragment()
+    }
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: TimerPickerViewModel
@@ -34,25 +38,18 @@ class TimerPickerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TimerPickerViewModel::class.java)
-
+        subscribe()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.timer_picker_dialog, container, false)
-        subscribe(view)
-        return view
+        return inflater.inflate(R.layout.timer_picker_dialog, container, false)
     }
 
-    private fun subscribe(view: View) {
+    private fun subscribe() {
         viewModel.getSeconds().observe(this, Observer {
-            view.findViewById<TextView>(R.id.label_seconds).text = it?.toString() ?: "00"
+            secondsText?.text = it?.toString() ?: "00"
         })
         viewModel.getMinutes().observe(this, Observer {
             minutesText?.text = it?.toString()
@@ -68,7 +65,5 @@ class TimerPickerFragment : Fragment() {
         }
     }
 
-    companion object {
-        fun newInstance() = TimerPickerFragment()
-    }
+
 }
