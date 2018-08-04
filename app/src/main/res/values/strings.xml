@@ -30,7 +30,10 @@
 
     <string name="reset">Reset</string>
 
-    <string name="select_time">Select a time</string>
+    <string name="select_time">Select a Timer</string>
+    <string name="timer_hours_short_label">h</string>
+    <string name="timer_minutes_short_label">m</string>
+    <string name="timer_seconds_short_label">s</string>
 
 
 </resources>

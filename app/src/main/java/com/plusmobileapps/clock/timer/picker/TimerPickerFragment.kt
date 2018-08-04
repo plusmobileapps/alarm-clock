@@ -38,7 +38,7 @@ class TimerPickerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TimerPickerViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(TimerPickerViewModel::class.java)
         subscribe()
     }
 
@@ -49,13 +49,13 @@ class TimerPickerFragment : Fragment() {
 
     private fun subscribe() {
         viewModel.getSeconds().observe(this, Observer {
-            secondsText?.text = it?.toString() ?: "00"
+            secondsText?.text = viewModel.getDisplayTime(it)
         })
         viewModel.getMinutes().observe(this, Observer {
-            minutesText?.text = it?.toString()
+            minutesText?.text = viewModel.getDisplayTime(it)
         })
         viewModel.getHours().observe(this, Observer {
-            hoursText?.text = it?.toString()
+            hoursText?.text = viewModel.getDisplayTime(it)
         })
         view?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
             viewModel.onTimerStartedFabClick()

@@ -27,8 +27,10 @@ class TimerPickerViewModel @Inject constructor(): ViewModel() {
     }
 
     fun onDeleteClicked() {
-        timerStack.pop()
-        update()
+        if (!timerStack.empty()) {
+            timerStack.pop()
+            update()
+        }
     }
 
     fun onTimerStartedFabClick() = timerButtonClickEvent.call()
@@ -91,6 +93,14 @@ class TimerPickerViewModel @Inject constructor(): ViewModel() {
         var hours = stack.pop()
         hours += (stack.pop() * 10)
         this.hours.value = hours
+    }
+
+    fun getDisplayTime(number: Int) : String {
+        return when (number) {
+            0 -> "00"
+            1,2,3,4,5,6,7,8,9 -> "0$number"
+            else -> number.toString()
+        }
     }
 
 }
