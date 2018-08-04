@@ -12,7 +12,7 @@
         style="@style/NumberBorderlessRipple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="numberClicked"
+        android:onClick="setTimerNumberClicked"
         android:text="1"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toStartOf="@+id/button2"
