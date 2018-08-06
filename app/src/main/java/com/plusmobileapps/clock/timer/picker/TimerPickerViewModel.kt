@@ -1,18 +1,18 @@
 package com.plusmobileapps.clock.timer.picker
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.plusmobileapps.clock.SingleLiveEvent
 import java.util.Stack
 import javax.inject.Inject
+import kotlin.math.min
 
 class TimerPickerViewModel @Inject constructor(): ViewModel() {
 
     private val seconds = MutableLiveData<Int>()
     private val minutes = MutableLiveData<Int>()
     private val hours = MutableLiveData<Int>()
-    val timerButtonClickEvent = SingleLiveEvent<Unit>()
+    val timerButtonStartEvent = SingleLiveEvent<Unit>()
+    val snackbarError = SingleLiveEvent<Unit>()
     private val timerStack = Stack<Int>()
 
     fun getSeconds() : LiveData<Int> = seconds
@@ -33,7 +33,14 @@ class TimerPickerViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    fun onTimerStartedFabClick() = timerButtonClickEvent.call()
+    fun onTimerStartedFabClick() {
+        val totalTime = getTotalTimeInMillis()
+        if (totalTime != 0) {
+            timerButtonStartEvent.call()
+        } else {
+            snackbarError.call()
+        }
+    }
 
     private fun update() {
         val totalNumbers = timerStack.size
@@ -101,6 +108,15 @@ class TimerPickerViewModel @Inject constructor(): ViewModel() {
             1,2,3,4,5,6,7,8,9 -> "0$number"
             else -> number.toString()
         }
+    }
+
+    private fun getTotalTimeInMillis() : Int {
+        val seconds = seconds.value ?: 0
+        val minutes = minutes.value ?: 0
+        val hours = hours.value ?: 0
+
+        val totalSeconds = seconds + (minutes * 60) + (hours * 60 * 60)
+        return totalSeconds * 1000
     }
 
 }

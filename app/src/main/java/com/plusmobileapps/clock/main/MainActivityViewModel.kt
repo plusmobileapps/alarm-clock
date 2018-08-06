@@ -10,6 +10,7 @@ import javax.inject.Inject
 sealed class MainActivityViewState {
     object Alarm : MainActivityViewState()
     object Timer : MainActivityViewState()
+    object TimerPicker : MainActivityViewState()
     object StopWatch : MainActivityViewState()
 }
 
@@ -49,6 +50,14 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
             viewState.value = request
         }
         closeBottomDrawer.call()
+    }
+
+    fun addTimerClicked() {
+        viewState.value = MainActivityViewState.TimerPicker
+    }
+
+    fun timerPickerFinished() {
+        viewState.value = MainActivityViewState.Timer
     }
 
 }

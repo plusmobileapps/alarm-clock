@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.di.ViewModelFactory
+import com.plusmobileapps.clock.main.MainActivityViewModel
 import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
 import javax.inject.Inject
 
@@ -31,13 +32,13 @@ class TimerFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: TimerViewModel
+    private lateinit var timerViewModel: TimerViewModel
     private val recyclerView by lazy { mView.findViewById<RecyclerView>(R.id.recycler_view) }
 
     private val itemListener = object : TimerItemListener {
-        override fun timerToggled(position: Int) = viewModel.toggleTimer(position)
-        override fun timerReset(position: Int) = viewModel.resetTimer(position)
-        override fun timerItemDeleted(position: Int) = viewModel.deleteTimer(position)
+        override fun timerToggled(position: Int) = timerViewModel.toggleTimer(position)
+        override fun timerReset(position: Int) = timerViewModel.resetTimer(position)
+        override fun timerItemDeleted(position: Int) = timerViewModel.deleteTimer(position)
     }
 
     private val timerAdapter = TimerAdapter(itemListener)
@@ -49,7 +50,7 @@ class TimerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(TimerViewModel::class.java)
+        timerViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(TimerViewModel::class.java)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = timerAdapter
@@ -57,10 +58,11 @@ class TimerFragment : Fragment() {
 
         subscribeToTimerList()
         subscribeToAddTimerClick()
+
     }
 
     private fun subscribeToTimerList() {
-        viewModel.timers.observe(this, Observer {
+        timerViewModel.timers.observe(this, Observer {
             it?.let {
                 timerAdapter.submitList(it)
             }
@@ -68,7 +70,7 @@ class TimerFragment : Fragment() {
     }
 
     private fun subscribeToAddTimerClick() {
-        viewModel.timerClicked.observe(this, Observer {
+        timerViewModel.timerClicked.observe(this, Observer {
             fragmentManager?.transaction {
                 replace(R.id.fragment_container, TimerPickerFragment.newInstance())
             }

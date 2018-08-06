@@ -63,11 +63,25 @@ class MainActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(appBar)
         setupBottomDrawer()
+
+        mainActivityViewModel.getViewStateLiveData().observe(this, Observer {
+            when(it) {
+                MainActivityViewState.Alarm -> fab.setImageResource(R.drawable.ic_add_white_24px)
+                MainActivityViewState.Timer -> fab.setImageResource(R.drawable.ic_add_white_24px)
+                MainActivityViewState.TimerPicker -> fab.setImageResource(R.drawable.ic_play_arrow_white_24px)
+                MainActivityViewState.StopWatch -> fab.setImageResource(R.drawable.ic_play_arrow_white_24px)
+            }
+        })
+
         fab.setOnClickListener {
             val viewState = mainActivityViewModel.getViewStateLiveData().value
             when(viewState) {
                 MainActivityViewState.Alarm -> alarmViewModel.showTimePicker()
-                MainActivityViewState.Timer -> timerViewModel.timerAddClicked()
+                MainActivityViewState.Timer -> {
+                    timerViewModel.timerAddClicked()
+                    mainActivityViewModel.addTimerClicked()
+                }
+                MainActivityViewState.TimerPicker -> timerPickerViewModel.onTimerStartedFabClick()
                 else -> Unit
             }
 
@@ -96,9 +110,12 @@ class MainActivity() : AppCompatActivity() {
                     MainActivityViewState.Alarm -> AlarmFragment.newInstance()
                     MainActivityViewState.StopWatch -> StopwatchFragment.newInstance()
                     MainActivityViewState.Timer -> TimerFragment.newInstance()
+                    else -> null
                 }
-                supportFragmentManager.transaction {
-                    replace(R.id.fragment_container, fragment)
+                fragment?.let {
+                    supportFragmentManager.transaction {
+                        replace(R.id.fragment_container, fragment)
+                    }
                 }
             }
         })
