@@ -1,5 +1,7 @@
 package com.plusmobileapps.clock.timer.picker
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +10,19 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.TIMER_NOTIFICATION_CHANNEL_ID
 import com.plusmobileapps.clock.di.ViewModelFactory
+import com.plusmobileapps.clock.main.MainActivity
 import com.plusmobileapps.clock.main.MainActivityViewModel
+import com.plusmobileapps.clock.timer.landing.TimerFragment
 import javax.inject.Inject
 
 class TimerPickerFragment : Fragment() {
@@ -62,10 +69,11 @@ class TimerPickerFragment : Fragment() {
             hoursText?.text = timerViewModel.getDisplayTime(it)
         })
         timerViewModel.timerButtonStartEvent.observe(this, Observer {
-            //todo start the actual timer
+            mainActivityViewModel.timerPickerFinished()
+
+            fragmentManager?.popBackStack(TimerFragment.BACK_STACK_TAG, 0)
         })
         timerViewModel.snackbarError.observe(this, Observer {
-            //todo make the snackbar error
             Toast.makeText(context, "Need a number!", Toast.LENGTH_LONG).show()
         })
         view?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
@@ -75,6 +83,7 @@ class TimerPickerFragment : Fragment() {
             timerViewModel.onDeleteClicked()
         }
     }
+
 
 
 }

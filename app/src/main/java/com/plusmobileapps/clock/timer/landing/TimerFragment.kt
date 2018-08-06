@@ -25,6 +25,7 @@ interface TimerPickerActivityCallback {
 class TimerFragment : Fragment() {
 
     companion object {
+        const val BACK_STACK_TAG = "Timer Back Stack Tag"
         fun newInstance() = TimerFragment()
     }
 
@@ -73,6 +74,7 @@ class TimerFragment : Fragment() {
         timerViewModel.timerClicked.observe(this, Observer {
             fragmentManager?.transaction {
                 replace(R.id.fragment_container, TimerPickerFragment.newInstance())
+                addToBackStack(BACK_STACK_TAG)
             }
         })
     }

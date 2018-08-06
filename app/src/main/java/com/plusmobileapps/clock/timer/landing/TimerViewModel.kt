@@ -13,7 +13,6 @@ class TimerViewModel @Inject constructor(private val timerRepository: TimerRepos
     val timers: LiveData<List<Timer>> = timerRepository.getTimers()
     val timerClicked = SingleLiveEvent<Unit>()
     private val timePickerTime = MutableLiveData<String>()
-    private val time = 0
 
     fun getTimePickerTime() : LiveData<String> = timePickerTime
 
@@ -40,10 +39,5 @@ class TimerViewModel @Inject constructor(private val timerRepository: TimerRepos
         timers.value?.let {
             val timer = it[position]
         }
-    }
-
-    fun numberClicked(number: String) {
-        val digit = number.toInt()
-
     }
 }

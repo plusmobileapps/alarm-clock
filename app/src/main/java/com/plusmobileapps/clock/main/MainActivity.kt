@@ -123,6 +123,8 @@ class MainActivity() : AppCompatActivity() {
         mainActivityViewModel.closeBottomDrawer.observe(this, Observer {
             bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         })
+
+        mainActivityViewModel.killApp.observe(this, Observer { finish() })
     }
 
     private fun setupAuthenticatedState() {
@@ -189,5 +191,9 @@ class MainActivity() : AppCompatActivity() {
         if (view is Button) {
             timerPickerViewModel.onNumberClicked(view.text.toString())
         }
+    }
+
+    override fun onBackPressed() {
+        mainActivityViewModel.onBackKeyPressed()
     }
 }

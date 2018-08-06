@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.SingleLiveEvent
 import javax.inject.Inject
+import kotlin.concurrent.timer
 
 sealed class MainActivityViewState {
     object Alarm : MainActivityViewState()
@@ -19,6 +20,8 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
     private val viewState = MutableLiveData<MainActivityViewState>().apply {
         value = MainActivityViewState.Alarm
     }
+    val killApp = SingleLiveEvent<Unit>()
+    val timerPickerBackPress = SingleLiveEvent<Unit>()
 
     val closeBottomDrawer = SingleLiveEvent<Unit>()
 
@@ -58,6 +61,16 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
 
     fun timerPickerFinished() {
         viewState.value = MainActivityViewState.Timer
+    }
+
+    fun onBackKeyPressed() {
+        val viewState = viewState.value
+        when(viewState) {
+            MainActivityViewState.Alarm -> killApp.call()
+            MainActivityViewState.Timer -> killApp.call()
+            MainActivityViewState.TimerPicker -> timerPickerFinished()
+            MainActivityViewState.StopWatch -> killApp.call()
+        }
     }
 
 }

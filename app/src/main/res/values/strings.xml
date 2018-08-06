@@ -8,6 +8,10 @@
     <string name="title_timer">Timer</string>
     <string name="title_stopwatch">Stopwatch</string>
 
+    <string name="notification_channel_timer">Timers</string>
+    <string name="notification_channel_timer_description">Play sounds when timer goes off</string>
+    <string name="timer_ticker_text_that_plays_for_accessibility">Timer in progress</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -34,6 +38,8 @@
     <string name="timer_hours_short_label">h</string>
     <string name="timer_minutes_short_label">m</string>
     <string name="timer_seconds_short_label">s</string>
+
+    <string name="label">Label</string>
 
 
 </resources>

@@ -2,11 +2,13 @@ package com.plusmobileapps.clock.timer.picker
 
 import androidx.lifecycle.*
 import com.plusmobileapps.clock.SingleLiveEvent
+import com.plusmobileapps.clock.data.timer.Timer
+import com.plusmobileapps.clock.data.timer.TimerRepository
 import java.util.Stack
 import javax.inject.Inject
 import kotlin.math.min
 
-class TimerPickerViewModel @Inject constructor(): ViewModel() {
+class TimerPickerViewModel @Inject constructor(private val timerRepository: TimerRepository): ViewModel() {
 
     private val seconds = MutableLiveData<Int>()
     private val minutes = MutableLiveData<Int>()
@@ -36,6 +38,7 @@ class TimerPickerViewModel @Inject constructor(): ViewModel() {
     fun onTimerStartedFabClick() {
         val totalTime = getTotalTimeInMillis()
         if (totalTime != 0) {
+            timerRepository.saveTimer(Timer(startTimeMillis = totalTime.toLong(), currentTimeLeftMillis = totalTime.toLong()))
             timerButtonStartEvent.call()
         } else {
             snackbarError.call()
