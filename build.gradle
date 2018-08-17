@@ -27,16 +27,20 @@ buildscript {
     ext.firebaseAuthVersion = '4.0.0'
     ext.picassoVersion = '2.71828'
 
+    ext.fragmentKtxVersion = '1.0.0-alpha1'
+
     ext.junitVersion = '4.12'
     ext.testRunnerVersion = '1.1.0-alpha3'
     ext.espressoVersion = '3.1.0-alpha3'
+    ext.lifecycleTestVersion = '1.0.0'
+    ext.mockitoVersion = '2.9.0'
 
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-beta03'
+        classpath 'com.android.tools.build:gradle:3.2.0-beta05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$googleServicesVersion"
 

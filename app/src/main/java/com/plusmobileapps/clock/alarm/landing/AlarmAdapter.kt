@@ -5,19 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.plusmobileapps.clock.R
-import com.plusmobileapps.clock.data.entities.Alarm
+import com.plusmobileapps.clock.data.alarm.Alarm
 
 interface AlarmItemListener {
     fun alarmItemClicked(position: Int)
     fun alarmTimeClicked(position: Int)
     fun alarmSwitchToggled(position: Int, isEnabled: Boolean)
 }
+
 
 class AlarmDiffCallback : DiffUtil.ItemCallback<Alarm>() {
     override fun areItemsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
@@ -28,6 +27,7 @@ class AlarmDiffCallback : DiffUtil.ItemCallback<Alarm>() {
         return oldItem == newItem
     }
 }
+
 
 class AlarmAdapter(private val itemListener: AlarmItemListener)
     : ListAdapter<Alarm, AlarmAdapter.AlarmViewHolder>(AlarmDiffCallback()) {
@@ -40,7 +40,9 @@ class AlarmAdapter(private val itemListener: AlarmItemListener)
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) = holder.bind(getItem(position))
 
-    class AlarmViewHolder(itemView: View, itemListener: AlarmItemListener) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+
+
+    class AlarmViewHolder(itemView: View, itemListener: AlarmItemListener) : RecyclerView.ViewHolder(itemView) {
         private val alarmToggle: Switch = itemView.findViewById(R.id.alarm_toggle)
         private val alarmTime: TextView = itemView.findViewById(R.id.edit_time_button)
         lateinit var mAlarm: Alarm

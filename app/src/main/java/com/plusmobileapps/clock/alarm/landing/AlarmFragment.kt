@@ -1,28 +1,21 @@
 package com.plusmobileapps.clock.alarm.landing
 
 import android.app.TimePickerDialog
-import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.SimpleAdapter
 import android.widget.TimePicker
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
-import com.plusmobileapps.clock.data.entities.Alarm
 import com.plusmobileapps.clock.di.ViewModelFactory
 import java.util.*
 import javax.inject.Inject
@@ -73,9 +66,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
             viewModel.updateAlarmToggle(isEnabled, position)
         }
     }
-    private val alarmAdapter by lazy {
-        AlarmAdapter(itemListener)
-    }
+    private val alarmAdapter = AlarmAdapter(itemListener)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +75,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(AlarmLandingViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(AlarmLandingViewModel::class.java)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = alarmAdapter

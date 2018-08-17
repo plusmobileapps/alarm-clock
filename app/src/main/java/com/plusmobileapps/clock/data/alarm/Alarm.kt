@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock.data.entities
+package com.plusmobileapps.clock.data.alarm
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

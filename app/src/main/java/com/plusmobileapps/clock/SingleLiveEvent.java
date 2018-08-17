@@ -1,4 +1,4 @@
-package com.plusmobileapps.clock.data;
+package com.plusmobileapps.clock;
 
 /*
  *  Copyright 2017 Google Inc.

@@ -1,9 +1,8 @@
-package com.plusmobileapps.clock.data.daos
+package com.plusmobileapps.clock.data.alarm
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
-import com.plusmobileapps.clock.data.entities.Alarm
+import com.plusmobileapps.clock.data.alarm.Alarm
 
 @Dao
 interface AlarmDao {
