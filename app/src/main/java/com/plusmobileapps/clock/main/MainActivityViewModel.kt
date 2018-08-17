@@ -1,5 +1,6 @@
 package com.plusmobileapps.clock.main
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,6 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
         value = MainActivityViewState.Alarm
     }
     val killApp = SingleLiveEvent<Unit>()
-    val timerPickerBackPress = SingleLiveEvent<Unit>()
 
     val closeBottomDrawer = SingleLiveEvent<Unit>()
 
@@ -47,7 +47,8 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun isNotCurrentScreen(request: MainActivityViewState) {
+    @VisibleForTesting
+    fun isNotCurrentScreen(request: MainActivityViewState) {
         val currentViewState = viewState.value ?: MainActivityViewState.Alarm
         if (request != currentViewState) {
             viewState.value = request

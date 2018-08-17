@@ -60,7 +60,8 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    testImplementation "android.arch.core:core-testing:$lifecycleTestVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 }
 
 //This needs to be at the bottom so gradle doesn't complain
