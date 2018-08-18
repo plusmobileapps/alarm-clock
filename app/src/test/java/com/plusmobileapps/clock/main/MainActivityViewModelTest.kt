@@ -1,12 +1,8 @@
 package com.plusmobileapps.clock.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import com.plusmobileapps.clock.R
-import com.plusmobileapps.clock.SingleLiveEvent
 import com.plusmobileapps.clock.util.TestUtils
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -34,7 +30,7 @@ class MainActivityViewModelTest {
         assert(viewModel.navigationClicked(R.id.navigation_alarm) == true)
         assert(viewModel.navigationClicked(R.id.navigation_timer) == true)
         assert(viewModel.navigationClicked(R.id.navigation_stopwatch) == true)
-        assert(viewModel.navigationClicked(R.id.fragment_container) == false)
+        assert(viewModel.navigationClicked(R.id.nav_host_fragment) == false)
     }
 
     @Test

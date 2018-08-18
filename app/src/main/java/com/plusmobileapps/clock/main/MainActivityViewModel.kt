@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.SingleLiveEvent
 import javax.inject.Inject
@@ -23,28 +24,8 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
     }
     val killApp = SingleLiveEvent<Unit>()
 
-    val closeBottomDrawer = SingleLiveEvent<Unit>()
-
     fun getViewStateLiveData() : LiveData<MainActivityViewState> {
         return viewState
-    }
-
-    fun navigationClicked(navResourceId: Int) : Boolean {
-        return when(navResourceId) {
-            R.id.navigation_alarm -> {
-                isNotCurrentScreen(MainActivityViewState.Alarm)
-                true
-            }
-            R.id.navigation_timer -> {
-                isNotCurrentScreen(MainActivityViewState.Timer)
-                true
-            }
-            R.id.navigation_stopwatch -> {
-                isNotCurrentScreen(MainActivityViewState.StopWatch)
-                true
-            }
-            else -> false
-        }
     }
 
     @VisibleForTesting
@@ -53,7 +34,6 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
         if (request != currentViewState) {
             viewState.value = request
         }
-        closeBottomDrawer.call()
     }
 
     fun addTimerClicked() {

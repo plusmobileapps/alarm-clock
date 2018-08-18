@@ -21,7 +21,7 @@ buildscript {
     ext.roomVersion = '2.0.0-alpha1'
     ext.constraintLayoutVersion = '1.1.2'
     ext.daggerVersion = '2.15'
-    ext.navigationVersion = '1.0.0-alpha02'
+    ext.navigationVersion = '1.0.0-alpha05'
     ext.gradlePlugin = '3.2.0-alpha18'
     ext.firebaseCoreVersion = '16.0.1'
     ext.firebaseAuthVersion = '4.0.0'

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.di.ViewModelFactory
-import com.plusmobileapps.clock.main.MainActivityViewModel
 import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
 import javax.inject.Inject
 
@@ -73,7 +72,7 @@ class TimerFragment : Fragment() {
     private fun subscribeToAddTimerClick() {
         timerViewModel.timerClicked.observe(this, Observer {
             fragmentManager?.transaction {
-                replace(R.id.fragment_container, TimerPickerFragment.newInstance())
+                replace(R.id.nav_host_fragment, TimerPickerFragment.newInstance())
                 addToBackStack(BACK_STACK_TAG)
             }
         })

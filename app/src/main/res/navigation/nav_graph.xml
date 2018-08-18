@@ -28,10 +28,18 @@
         android:id="@+id/timerFragment"
         android:name="com.plusmobileapps.clock.timer.landing.TimerFragment"
         android:label="fragment_timer"
-        tools:layout="@layout/fragment_timer" />
+        tools:layout="@layout/fragment_timer" >
+        <action
+            android:id="@+id/action_timerFragment_to_timerPickerFragment2"
+            app:destination="@id/timerPickerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/stopwatchFragment"
         android:name="com.plusmobileapps.clock.stopwatch.StopwatchFragment"
         android:label="fragment_stopwatch"
         tools:layout="@layout/fragment_stopwatch" />
+    <fragment
+        android:id="@+id/timerPickerFragment"
+        android:name="com.plusmobileapps.clock.timer.picker.TimerPickerFragment"
+        android:label="TimerPickerFragment" ></fragment>
 </navigation>

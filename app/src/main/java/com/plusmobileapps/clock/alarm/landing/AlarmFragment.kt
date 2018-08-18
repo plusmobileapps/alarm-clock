@@ -10,9 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailActivity
@@ -22,7 +24,7 @@ import javax.inject.Inject
 
 const val EXTRA_ALARM_ID = "alarm_id"
 
-class AlarmFragment : androidx.fragment.app.Fragment(){
+class AlarmFragment : Fragment(), AlarmItemListener {
 
     companion object {
         fun newInstance(): AlarmFragment {
@@ -41,32 +43,7 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
 
     private lateinit var viewModel: AlarmLandingViewModel
 
-    private val itemListener = object : AlarmItemListener {
-        override fun alarmItemClicked(position: Int) {
-            val id = viewModel.getAlarmId(position)
-            id?.let {
-                val intent = Intent(context, AlarmDetailActivity::class.java)
-                intent.putExtra(EXTRA_ALARM_ID, it)
-                startActivity(intent)
-            }
-        }
-
-        override fun alarmTimeClicked(position: Int) {
-            val alarm = viewModel.getAlarm(position)
-            alarm?.let {
-                showTimePicker(it.hour, it.min, TimePickerDialog.OnTimeSetListener {  _: TimePicker, hour: Int, min: Int ->
-                    it.hour = hour
-                    it.min = min
-                    viewModel.updateAlarm(it)
-                })
-            }
-        }
-
-        override fun alarmSwitchToggled(position: Int, isEnabled: Boolean) {
-            viewModel.updateAlarmToggle(isEnabled, position)
-        }
-    }
-    private val alarmAdapter = AlarmAdapter(itemListener)
+    private val alarmAdapter = AlarmAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +61,9 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if (viewHolder is AlarmAdapter.AlarmViewHolder) viewModel.deleteAlarm(viewHolder.mAlarm)
             }
+        }
+        view?.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
+            viewModel.showTimePicker()
         }
         ItemTouchHelper(swipeHandler).apply {
             attachToRecyclerView(recyclerView)
@@ -108,11 +88,11 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
 
     private fun subscribeToShowingTimePicker() {
         viewModel.showTimePickerToggle.observe(this, Observer {
-            showTimePicker(null, null, addAlarmTimeListener)
+            showTimePicker(timeListener = addAlarmTimeListener)
         })
     }
 
-    private fun showTimePicker(startHour: Int?, startMin: Int?, timeListener: TimePickerDialog.OnTimeSetListener) {
+    private fun showTimePicker(startHour: Int? = null, startMin: Int? = null, timeListener: TimePickerDialog.OnTimeSetListener) {
         val c = Calendar.getInstance()
         val hour = startHour ?: c.get(Calendar.HOUR_OF_DAY)
         val minute = startMin ?: c.get(Calendar.MINUTE)
@@ -122,6 +102,30 @@ class AlarmFragment : androidx.fragment.app.Fragment(){
 
     private val addAlarmTimeListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
         viewModel.addAlarm(hour, min)
+    }
+
+    override fun alarmItemClicked(position: Int) {
+        val id = viewModel.getAlarmId(position)
+        id?.let {
+            val intent = Intent(context, AlarmDetailActivity::class.java)
+            intent.putExtra(EXTRA_ALARM_ID, it)
+            startActivity(intent)
+        }
+    }
+
+    override fun alarmTimeClicked(position: Int) {
+        val alarm = viewModel.getAlarm(position)
+        alarm?.let {
+            showTimePicker(it.hour, it.min, TimePickerDialog.OnTimeSetListener {  _: TimePicker, hour: Int, min: Int ->
+                it.hour = hour
+                it.min = min
+                viewModel.updateAlarm(it)
+            })
+        }
+    }
+
+    override fun alarmSwitchToggled(position: Int, isEnabled: Boolean) {
+        viewModel.updateAlarmToggle(isEnabled, position)
     }
 
 }

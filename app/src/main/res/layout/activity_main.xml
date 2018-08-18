@@ -5,28 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <fragment
+        android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottom_app_bar_height"/>
+        android:layout_marginBottom="@dimen/bottom_app_bar_height"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"/>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_app_bar_height"
-        app:navigationIcon="@drawable/ic_drawer_menu_24px"
         android:layout_gravity="bottom"
+        app:menu="@menu/navigation"
+        android:id="@+id/navigation_view"
         />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/bottomAppBar"
-        android:src="@drawable/ic_add_white_24px"/>
-
-    <include layout="@layout/bottom_menu"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
