@@ -115,37 +115,20 @@ class MainActivity() : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         }
     }
 
-    override fun onNavigationItemReselected(p0: MenuItem) {
-    }
-
-    /**
-     * Handle Listeners
-     */
-    private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
+    override fun onNavigationItemReselected(item: MenuItem) {
         when (item.itemId) {
-            R.id.navigation_alarm -> {
-                navController.navigate(R.id.alarmFragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_timer -> {
-                navController.navigate(R.id.timerFragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_stopwatch -> {
-                navController.navigate(R.id.stopwatchFragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            else -> false
+            R.id.navigation_alarm -> navController.navigate(R.id.alarmFragment)
+            R.id.navigation_timer -> navController.navigate(R.id.timerFragment)
+            R.id.navigation_stopwatch -> navController.navigate(R.id.stopwatchFragment)
+            else -> Unit
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 
     fun setTimerNumberClicked(view: View) {
         if (view is Button) {
             timerPickerViewModel.onNumberClicked(view.text.toString())
         }
-    }
-
-    override fun onBackPressed() {
-        mainActivityViewModel.onBackKeyPressed()
     }
 }
