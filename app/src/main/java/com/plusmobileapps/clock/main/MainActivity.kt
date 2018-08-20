@@ -2,10 +2,11 @@ package com.plusmobileapps.clock.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
@@ -17,10 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
-import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
-import com.plusmobileapps.clock.timer.landing.TimerViewModel
-import com.plusmobileapps.clock.timer.picker.TimerPickerViewModel
+import com.plusmobileapps.clock.util.showOrGone
 import javax.inject.Inject
 
 class MainActivity() : AppCompatActivity() {
@@ -39,7 +38,6 @@ class MainActivity() : AppCompatActivity() {
     @Inject
     lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
-    private val timerPickerViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(TimerPickerViewModel::class.java) }
     private val mainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
     private val navController by lazy { Navigation.findNavController(findViewById(R.id.nav_host_fragment)) }
 
@@ -48,13 +46,30 @@ class MainActivity() : AppCompatActivity() {
         MyApplication.appComponent.inject(this)
         setContentView(R.layout.activity_main)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_view)
-//                .apply {
-//            setOnNavigationItemReselectedListener(this@MainActivity)
-//            setOnNavigationItemSelectedListener(this@MainActivity)
-//        }
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        NavigationUI.setupWithNavController(toolbar, navController)
+
         if (FirebaseAuth.getInstance().currentUser != null) setupAuthenticatedState() else setupUnauthenticatedState()
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.topappbar_menu, menu)
+        navController.addOnNavigatedListener { controller, destination ->
+            val menuButton = menu?.findItem(R.id.menu_settings)
+
+            when (destination.id) {
+                R.id.timerPickerFragment, R.id.alarmDetailFragment -> {
+                    menuButton?.isVisible = false
+                }
+                R.id.navigation_timer, R.id.navigation_alarm, R.id.navigation_stopwatch -> {
+                    menuButton?.isVisible = true
+                }
+            }
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun setupAuthenticatedState() {
@@ -76,7 +91,10 @@ class MainActivity() : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        Snackbar.make(coordinatorLayout, item?.title ?: "", Snackbar.LENGTH_LONG).show()
+        if (item?.itemId == R.id.menu_settings) {
+            navController.navigate(R.id.settingsFragment)
+        }
+
         return true
     }
 
@@ -113,11 +131,7 @@ class MainActivity() : AppCompatActivity() {
 //        }
 //    }
 
-    override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 
-    fun setTimerNumberClicked(view: View) {
-        if (view is Button) {
-            timerPickerViewModel.onNumberClicked(view.text.toString())
-        }
-    }
+
+    override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 }

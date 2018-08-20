@@ -18,6 +18,9 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/navigation_alarm"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_navigation_alarm_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_timer"
@@ -29,12 +32,19 @@
             app:destination="@id/timerPickerFragment"
             app:enterAnim="@anim/fui_slide_in_right"
             app:exitAnim="@anim/fui_slide_out_left" />
+        <action
+            android:id="@+id/action_navigation_timer_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_stopwatch"
         android:name="com.plusmobileapps.clock.stopwatch.StopwatchFragment"
         android:label="fragment_stopwatch"
-        tools:layout="@layout/fragment_stopwatch" />
+        tools:layout="@layout/fragment_stopwatch" >
+        <action
+            android:id="@+id/action_navigation_stopwatch_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/timerPickerFragment"
         android:name="com.plusmobileapps.clock.timer.picker.TimerPickerFragment"
@@ -43,4 +53,9 @@
         android:id="@+id/alarmDetailFragment"
         android:name="com.plusmobileapps.clock.alarm.detail.AlarmDetailFragment"
         android:label="AlarmDetailFragment"></fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.plusmobileapps.clock.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
