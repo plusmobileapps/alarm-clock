@@ -36,30 +36,30 @@ class MainActivityViewModelTest {
     @Test
     fun testIsNotCurrentScreenWithPreviousScreenSelected() {
         viewModel.closeBottomDrawer.observe(TestUtils.TEST_OBSERVER, observer)
-        viewModel.isNotCurrentScreen(MainActivityViewState.Alarm)
-        assertEquals(MainActivityViewState.Alarm, viewModel.getViewStateLiveData().value)
+        viewModel.isNotCurrentScreen(ViewState.Alarm)
+        assertEquals(ViewState.Alarm, viewModel.getViewStateLiveData().value)
         verify(observer).onChanged(null)
     }
 
     @Test
     fun testIsNotCurrentScreenWithOtherScreenSelected() {
         viewModel.closeBottomDrawer.observe(TestUtils.TEST_OBSERVER, observer)
-        viewModel.isNotCurrentScreen(MainActivityViewState.StopWatch)
-        assertEquals(MainActivityViewState.StopWatch, viewModel.getViewStateLiveData().value)
+        viewModel.isNotCurrentScreen(ViewState.StopWatch)
+        assertEquals(ViewState.StopWatch, viewModel.getViewStateLiveData().value)
         verify(observer).onChanged(null)
     }
 
     @Test
     fun testAddTimerClicked() {
         viewModel.addTimerClicked()
-        assertEquals(MainActivityViewState.TimerPicker, viewModel.getViewStateLiveData().value)
+        assertEquals(ViewState.TimerPicker, viewModel.getViewStateLiveData().value)
     }
 
     @Test
     fun testTimerPickerFinished() {
         viewModel.addTimerClicked()
         viewModel.timerPickerFinished()
-        assertEquals(MainActivityViewState.Timer, viewModel.getViewStateLiveData().value)
+        assertEquals(ViewState.Timer, viewModel.getViewStateLiveData().value)
     }
 
     @Test
@@ -71,10 +71,10 @@ class MainActivityViewModelTest {
 
     @Test
     fun testOnBackKeyPressedTimerPicker() {
-        assertEquals(MainActivityViewState.Alarm, viewModel.getViewStateLiveData().value)
+        assertEquals(ViewState.Alarm, viewModel.getViewStateLiveData().value)
         viewModel.addTimerClicked()
         viewModel.onBackKeyPressed()
-        assertEquals(MainActivityViewState.Timer, viewModel.getViewStateLiveData().value)
+        assertEquals(ViewState.Timer, viewModel.getViewStateLiveData().value)
     }
 
 }

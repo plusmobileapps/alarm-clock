@@ -5,33 +5,25 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.transaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import com.google.android.material.bottomappbar.BottomAppBar
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
-import com.plusmobileapps.clock.alarm.landing.AlarmFragment
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.di.ViewModelFactory
-import com.plusmobileapps.clock.stopwatch.StopwatchFragment
-import com.plusmobileapps.clock.timer.landing.TimerFragment
 import com.plusmobileapps.clock.timer.landing.TimerViewModel
 import com.plusmobileapps.clock.timer.picker.TimerPickerViewModel
 import javax.inject.Inject
 
-class MainActivity() : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
+class MainActivity() : AppCompatActivity() {
 
     private val coordinatorLayout by lazy { findViewById<CoordinatorLayout>(R.id.coordinator) }
 //    private val appBar by lazy { findViewById<BottomAppBar>(R.id.bottomAppBar) }
@@ -47,8 +39,6 @@ class MainActivity() : AppCompatActivity(), BottomNavigationView.OnNavigationIte
     @Inject
     lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
-    private val alarmViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(AlarmLandingViewModel::class.java) }
-    private val timerViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(TimerViewModel::class.java) }
     private val timerPickerViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(TimerPickerViewModel::class.java) }
     private val mainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
     private val navController by lazy { Navigation.findNavController(findViewById(R.id.nav_host_fragment)) }
@@ -57,15 +47,14 @@ class MainActivity() : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         super.onCreate(savedInstanceState)
         MyApplication.appComponent.inject(this)
         setContentView(R.layout.activity_main)
-        findViewById<BottomNavigationView>(R.id.navigation_view).apply {
-            setOnNavigationItemReselectedListener(this@MainActivity)
-            setOnNavigationItemSelectedListener(this@MainActivity)
-        }
-//        setSupportActionBar(appBar)
-
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_view)
+//                .apply {
+//            setOnNavigationItemReselectedListener(this@MainActivity)
+//            setOnNavigationItemSelectedListener(this@MainActivity)
+//        }
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
         if (FirebaseAuth.getInstance().currentUser != null) setupAuthenticatedState() else setupUnauthenticatedState()
 
-        mainActivityViewModel.killApp.observe(this, Observer { finish() })
     }
 
     private fun setupAuthenticatedState() {
@@ -97,32 +86,32 @@ class MainActivity() : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         if (authenticated) setupAuthenticatedState() else setupUnauthenticatedState()
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean{
-        return when (item.itemId) {
-            R.id.navigation_alarm -> {
-                navController.navigate(R.id.alarmFragment)
-                true
-            }
-            R.id.navigation_timer -> {
-                navController.navigate(R.id.timerFragment)
-                true
-            }
-            R.id.navigation_stopwatch -> {
-                navController.navigate(R.id.stopwatchFragment)
-                true
-            }
-            else -> false
-        }
-    }
-
-    override fun onNavigationItemReselected(item: MenuItem) {
-        when (item.itemId) {
-            R.id.navigation_alarm -> navController.navigate(R.id.alarmFragment)
-            R.id.navigation_timer -> navController.navigate(R.id.timerFragment)
-            R.id.navigation_stopwatch -> navController.navigate(R.id.stopwatchFragment)
-            else -> Unit
-        }
-    }
+//    override fun onNavigationItemSelected(item: MenuItem): Boolean{
+//        return when (item.itemId) {
+//            R.id.navigation_alarm -> {
+//                navController.navigate(R.id.alarmFragment)
+//                true
+//            }
+//            R.id.navigation_timer -> {
+//                navController.navigate(R.id.timerFragment)
+//                true
+//            }
+//            R.id.navigation_stopwatch -> {
+//                navController.navigate(R.id.stopwatchFragment)
+//                true
+//            }
+//            else -> false
+//        }
+//    }
+//
+//    override fun onNavigationItemReselected(item: MenuItem) {
+//        when (item.itemId) {
+//            R.id.navigation_alarm -> navController.navigate(R.id.alarmFragment)
+//            R.id.navigation_timer -> navController.navigate(R.id.timerFragment)
+//            R.id.navigation_stopwatch -> navController.navigate(R.id.stopwatchFragment)
+//            else -> Unit
+//        }
+//    }
 
     override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 

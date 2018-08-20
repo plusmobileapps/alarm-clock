@@ -58,11 +58,9 @@ class AlarmFragment : Fragment(), AlarmItemListener {
                     if (viewHolder is AlarmAdapter.AlarmViewHolder) viewModel.deleteAlarm(viewHolder.mAlarm)
                 }
             }
-            ItemTouchHelper(swipeHandler).apply {
-                attachToRecyclerView(recyclerView)
-            }
+            ItemTouchHelper(swipeHandler).apply { attachToRecyclerView(recyclerView) }
 
-            it.findViewById<FloatingActionButton>(R.id.fab)?.setOnClickListener {
+            it.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
                 viewModel.showTimePicker()
             }
             subscribeToAlarmList()
@@ -103,7 +101,7 @@ class AlarmFragment : Fragment(), AlarmItemListener {
     override fun alarmItemClicked(position: Int) {
         val id = viewModel.getAlarmId(position) ?: return
         val bundle = bundleOf(EXTRA_ALARM_ID to id)
-        navigator?.navigate(R.id.alarmDetailFragment, bundle)
+        navigator?.navigate(R.id.action_alarmFragment_to_alarmDetailFragment, bundle)
     }
 
     override fun alarmTimeClicked(position: Int) {

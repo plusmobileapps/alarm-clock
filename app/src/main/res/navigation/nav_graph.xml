@@ -2,38 +2,36 @@
 <navigation xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/alarmFragment">
+    app:startDestination="@id/navigation_alarm">
 
     <fragment
-        android:id="@+id/alarmFragment"
+        android:id="@+id/navigation_alarm"
         android:name="com.plusmobileapps.clock.alarm.landing.AlarmFragment"
         android:label="fragment_alarm"
         tools:layout="@layout/fragment_alarm" >
         <action
-            android:id="@+id/action_alarmFragment_to_stopwatchFragment"
-            app:destination="@id/stopwatchFragment" />
-        <action
-            android:id="@+id/action_alarmFragment_to_timerFragment"
-            app:destination="@id/timerFragment"
-            app:enterAnim="@anim/nav_default_pop_enter_anim"
-            app:exitAnim="@anim/nav_default_pop_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
             android:id="@+id/action_alarmFragment_to_alarmDetailFragment"
-            app:destination="@id/alarmDetailFragment" />
+            app:destination="@id/alarmDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/navigation_alarm"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
-        android:id="@+id/timerFragment"
+        android:id="@+id/navigation_timer"
         android:name="com.plusmobileapps.clock.timer.landing.TimerFragment"
         android:label="fragment_timer"
-        tools:layout="@layout/fragment_timer" >
+        tools:layout="@layout/fragment_timer">
         <action
             android:id="@+id/action_timerFragment_to_timerPickerFragment2"
-            app:destination="@id/timerPickerFragment" />
+            app:destination="@id/timerPickerFragment"
+            app:enterAnim="@anim/fui_slide_in_right"
+            app:exitAnim="@anim/fui_slide_out_left" />
     </fragment>
     <fragment
-        android:id="@+id/stopwatchFragment"
+        android:id="@+id/navigation_stopwatch"
         android:name="com.plusmobileapps.clock.stopwatch.StopwatchFragment"
         android:label="fragment_stopwatch"
         tools:layout="@layout/fragment_stopwatch" />
@@ -44,6 +42,5 @@
     <fragment
         android:id="@+id/alarmDetailFragment"
         android:name="com.plusmobileapps.clock.alarm.detail.AlarmDetailFragment"
-        android:label="AlarmDetailFragment" >
-    </fragment>
+        android:label="AlarmDetailFragment"></fragment>
 </navigation>

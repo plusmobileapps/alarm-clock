@@ -1,57 +1,33 @@
 package com.plusmobileapps.clock.main
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.Navigation
 import com.plusmobileapps.clock.R
-import com.plusmobileapps.clock.SingleLiveEvent
+import java.util.*
 import javax.inject.Inject
-import kotlin.concurrent.timer
 
-sealed class MainActivityViewState {
-    object Alarm : MainActivityViewState()
-    object Timer : MainActivityViewState()
-    object TimerPicker : MainActivityViewState()
-    object StopWatch : MainActivityViewState()
+sealed class ViewState {
+    object Alarm : ViewState()
+    object Timer : ViewState()
+    object Stopwatch : ViewState()
 }
 
 class MainActivityViewModel @Inject constructor() : ViewModel() {
 
-    private val viewState = MutableLiveData<MainActivityViewState>().apply {
-        value = MainActivityViewState.Alarm
-    }
-    val killApp = SingleLiveEvent<Unit>()
-
-    fun getViewStateLiveData() : LiveData<MainActivityViewState> {
-        return viewState
+    private val viewState = MutableLiveData<ViewState>().apply {
+        value = ViewState.Alarm
     }
 
-    @VisibleForTesting
-    fun isNotCurrentScreen(request: MainActivityViewState) {
-        val currentViewState = viewState.value ?: MainActivityViewState.Alarm
-        if (request != currentViewState) {
-            viewState.value = request
-        }
-    }
+    fun getViewStateLiveData() : LiveData<ViewState> = viewState
 
-    fun addTimerClicked() {
-        viewState.value = MainActivityViewState.TimerPicker
-    }
-
-    fun timerPickerFinished() {
-        viewState.value = MainActivityViewState.Timer
-    }
-
-    fun onBackKeyPressed() {
-        val viewState = viewState.value
-        when(viewState) {
-            MainActivityViewState.Alarm -> killApp.call()
-            MainActivityViewState.Timer -> killApp.call()
-            MainActivityViewState.TimerPicker -> timerPickerFinished()
-            MainActivityViewState.StopWatch -> killApp.call()
-        }
-    }
+//    fun onBackKeyPressed() {
+//        val currentTab = viewState.value
+//        when(currentTab) {
+//            ViewState.Alarm -> alarmStack.value?.pop()
+//            ViewState.Timer -> timerStack.value?.pop()
+//            ViewState.Stopwatch ->
+//        }
+//    }
 
 }
