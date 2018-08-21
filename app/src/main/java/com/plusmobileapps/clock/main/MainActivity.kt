@@ -45,7 +45,7 @@ class MainActivity() : AppCompatActivity() {
                 timerSectionWrapper.showOrInvisible(false)
                 stopwatchSectionWrapper.showOrInvisible(false)
                 returnValue = true
-                onReselected(alarmNavController, R.id.nav_host_alarm)
+                onReselected(R.id.nav_host_alarm)
             }
             R.id.navigation_timer -> {
                 currentController = timerNavController
@@ -53,7 +53,7 @@ class MainActivity() : AppCompatActivity() {
                 timerSectionWrapper.showOrInvisible(true)
                 stopwatchSectionWrapper.showOrInvisible(false)
                 returnValue = true
-                onReselected(timerNavController, R.id.nav_host_timer)
+                onReselected(R.id.nav_host_timer)
             }
             R.id.navigation_stopwatch -> {
                 currentController = stopwatchNavController
@@ -61,7 +61,7 @@ class MainActivity() : AppCompatActivity() {
                 timerSectionWrapper.showOrInvisible(false)
                 stopwatchSectionWrapper.showOrInvisible(true)
                 returnValue = true
-                onReselected(stopwatchNavController, R.id.nav_host_stopwatch)
+                onReselected(R.id.nav_host_stopwatch)
             }
         }
 
@@ -93,14 +93,8 @@ class MainActivity() : AppCompatActivity() {
                 .or { finish() }
     }
 
-    private fun onReselected(navController: NavController, hostId: Int) {
-        val fragmentClassName = (navController.currentDestination as FragmentNavigator.Destination).fragmentClass.simpleName
-        val navFragment = supportFragmentManager.findFragmentById(hostId) ?: return
-        navFragment.childFragmentManager.fragments.asReversed().forEach { fragment ->
-            if (fragment.javaClass.simpleName == fragmentClassName && fragment is OnReselectedDelegate) {
-                fragment.onReselected()
-                return@forEach
-            }
-        }
+    private fun onReselected(navHostId: Int) {
+        val navFragment = supportFragmentManager.findFragmentById(navHostId) ?: return
+        (navFragment.childFragmentManager.fragments.first { it.isVisible } as OnReselectedDelegate).onReselected()
     }
 }
