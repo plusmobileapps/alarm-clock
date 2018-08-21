@@ -17,14 +17,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.di.ViewModelFactory
+import com.plusmobileapps.clock.main.OnReselectedDelegate
 import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
+import com.plusmobileapps.clock.util.isSectionVisible
+import com.plusmobileapps.clock.util.setupActionBar
 import javax.inject.Inject
 
 interface TimerPickerActivityCallback {
     fun onTimerStarted(seconds: Int, minutes: Int, hours: Int)
 }
 
-class TimerFragment : Fragment() {
+class TimerFragment : Fragment(), OnReselectedDelegate {
 
     companion object {
         fun newInstance() = TimerFragment()
@@ -66,11 +69,13 @@ class TimerFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (isSectionVisible()) setupActionBar()
+    }
+
     private fun subscribeToTimerList() {
         timerViewModel.timers.observe(this, Observer {
-            it?.let {
-                timerAdapter.submitList(it)
-            }
+            timerAdapter.submitList(it)
         })
     }
 
@@ -80,5 +85,9 @@ class TimerFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_timer, container, false)
     }
+
+    override fun onReselected() = setupActionBar()
+
+    private fun setupActionBar() = setupActionBar(context?.getString(R.string.title_timer) ?: "Timer")
 
 }

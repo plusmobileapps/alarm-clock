@@ -5,11 +5,17 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -19,19 +25,24 @@ import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.di.ViewModelFactory
+import com.plusmobileapps.clock.util.or
 import com.plusmobileapps.clock.util.showOrGone
+import com.plusmobileapps.clock.util.showOrInvisible
+import org.jetbrains.anko.find
 import javax.inject.Inject
 
 class MainActivity() : AppCompatActivity() {
 
-    private val coordinatorLayout by lazy { findViewById<CoordinatorLayout>(R.id.coordinator) }
-//    private val appBar by lazy { findViewById<BottomAppBar>(R.id.bottomAppBar) }
-//    private val fab by lazy { findViewById<FloatingActionButton>(R.id.floatingActionButton) }
-//    private val signOnButton by lazy { findViewById<Button>(R.id.sign_on_button) }
-//    private val signOffButton by lazy { findViewById<Button>(R.id.sign_out_button) }
-//    private val profileImage by lazy { findViewById<ImageView>(R.id.profile_image) }
+    private val root by lazy { findViewById<ConstraintLayout>(R.id.container) }
+    private val alarmSectionWrapper by lazy { findViewById<FrameLayout>(R.id.alarm_section_wrapper) }
+    private val timerSectionWrapper by lazy { findViewById<FrameLayout>(R.id.timer_section_wrapper) }
+    private val stopwatchSectionWrapper by lazy { findViewById<FrameLayout>(R.id.stopwatch_section_wrapper) }
 
-    private lateinit var bottomDrawerBehavior: BottomSheetBehavior<View>
+    private val alarmNavController: NavController by lazy { findNavController(R.id.nav_host_alarm) }
+    private val timerNavController: NavController by lazy { findNavController(R.id.nav_host_timer) }
+    private val stopwatchNavController: NavController by lazy { findNavController(R.id.nav_host_stopwatch) }
+
+    private var currentController: NavController? = null
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -39,99 +50,100 @@ class MainActivity() : AppCompatActivity() {
     lateinit var firebaseAuthHelper: FirebaseAuthHelper
 
     private val mainActivityViewModel by lazy { ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java) }
-    private val navController by lazy { Navigation.findNavController(findViewById(R.id.nav_host_fragment)) }
+
+    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        var returnValue = false
+
+        when (item.itemId) {
+            R.id.navigation_alarm -> {
+                currentController = alarmNavController
+                alarmSectionWrapper.showOrInvisible(true)
+                timerSectionWrapper.showOrInvisible(false)
+                stopwatchSectionWrapper.showOrInvisible(false)
+                returnValue = true
+            }
+            R.id.navigation_timer -> {
+                currentController = timerNavController
+                alarmSectionWrapper.showOrInvisible(false)
+                timerSectionWrapper.showOrInvisible(true)
+                stopwatchSectionWrapper.showOrInvisible(false)
+                returnValue = true
+            }
+            R.id.navigation_stopwatch -> {
+                currentController = stopwatchNavController
+                alarmSectionWrapper.showOrInvisible(false)
+                timerSectionWrapper.showOrInvisible(false)
+                stopwatchSectionWrapper.showOrInvisible(true)
+                returnValue = true
+            }
+        }
+        onReselected(item.itemId)
+        return@OnNavigationItemSelectedListener returnValue
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MyApplication.appComponent.inject(this)
         setContentView(R.layout.activity_main)
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_view)
-        NavigationUI.setupWithNavController(bottomNavigationView, navController)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        NavigationUI.setupWithNavController(toolbar, navController)
-
-        if (FirebaseAuth.getInstance().currentUser != null) setupAuthenticatedState() else setupUnauthenticatedState()
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.topappbar_menu, menu)
-        navController.addOnNavigatedListener { controller, destination ->
-            val menuButton = menu?.findItem(R.id.menu_settings)
-
-            when (destination.id) {
-                R.id.timerPickerFragment, R.id.alarmDetailFragment -> {
-                    menuButton?.isVisible = false
-                }
-                R.id.navigation_timer, R.id.navigation_alarm, R.id.navigation_stopwatch -> {
-                    menuButton?.isVisible = true
-                }
-            }
+        findViewById<BottomNavigationView>(R.id.navigation_view).apply {
+            setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         }
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    private fun setupAuthenticatedState() {
-//        profileImage.showOrGone(true)
-//        signOffButton.showOrGone(true)
-//        signOnButton.showOrGone(false)
-//        FirebaseAuth.getInstance().currentUser?.photoUrl?.let {
-//            Picasso.get()
-//                    .load(it)
-//                    .transform(CircleTransform())
-//                    .into(profileImage)
-//        }
-    }
-
-    private fun setupUnauthenticatedState() {
-//        profileImage.showOrGone(false)
-//        signOffButton.showOrGone(false)
-//        signOnButton.showOrGone(true)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.menu_settings) {
-            navController.navigate(R.id.settingsFragment)
-        }
-
-        return true
+        currentController = alarmNavController
+        alarmSectionWrapper.showOrInvisible(true)
+        timerSectionWrapper.showOrInvisible(false)
+        stopwatchSectionWrapper.showOrInvisible(false)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val authenticated = firebaseAuthHelper.handleResult(requestCode, resultCode, data)
-        if (authenticated) setupAuthenticatedState() else setupUnauthenticatedState()
+//        if (authenticated) setupAuthenticatedState() else setupUnauthenticatedState()
     }
 
-//    override fun onNavigationItemSelected(item: MenuItem): Boolean{
-//        return when (item.itemId) {
-//            R.id.navigation_alarm -> {
-//                navController.navigate(R.id.alarmFragment)
-//                true
-//            }
-//            R.id.navigation_timer -> {
-//                navController.navigate(R.id.timerFragment)
-//                true
-//            }
-//            R.id.navigation_stopwatch -> {
-//                navController.navigate(R.id.stopwatchFragment)
-//                true
-//            }
-//            else -> false
-//        }
-//    }
-//
-//    override fun onNavigationItemReselected(item: MenuItem) {
-//        when (item.itemId) {
-//            R.id.navigation_alarm -> navController.navigate(R.id.alarmFragment)
-//            R.id.navigation_timer -> navController.navigate(R.id.timerFragment)
-//            R.id.navigation_stopwatch -> navController.navigate(R.id.stopwatchFragment)
-//            else -> Unit
-//        }
-//    }
+    override fun supportNavigateUpTo(upIntent: Intent) {
+        currentController?.navigateUp()
+    }
 
+    override fun onBackPressed() {
+        currentController
+                ?.let { if(it.popBackStack().not()) finish() }
+                .or { finish() }
+    }
 
-
-    override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
+    private fun onReselected(itemId: Int) {
+        when (itemId) {
+            R.id.navigation_alarm -> {
+                val fragmentClassName = (alarmNavController.currentDestination as FragmentNavigator.Destination).fragmentClass.simpleName
+                val navFragment = supportFragmentManager.findFragmentById(R.id.nav_host_alarm) ?: return
+                navFragment.childFragmentManager.fragments.asReversed().forEach { fragment ->
+                    if (fragment.javaClass.simpleName == fragmentClassName && fragment is OnReselectedDelegate) {
+                        fragment.onReselected()
+                        return@forEach
+                    }
+                }
+            }
+            R.id.navigation_timer -> {
+                val fragmentClassName = (timerNavController.currentDestination as FragmentNavigator.Destination).fragmentClass.simpleName
+                val navFragment = supportFragmentManager.findFragmentById(R.id.nav_host_timer) ?: return
+                navFragment.childFragmentManager.fragments.asReversed().forEach { fragment ->
+                    if (fragment.javaClass.simpleName == fragmentClassName && fragment is OnReselectedDelegate) {
+                        fragment.onReselected()
+                        return@forEach
+                    }
+                }
+            }
+            R.id.navigation_stopwatch -> {
+                val fragmentClassName = (stopwatchNavController.currentDestination as FragmentNavigator.Destination).fragmentClass.simpleName
+                val navFragment = supportFragmentManager.findFragmentById(R.id.nav_host_stopwatch) ?: return
+                navFragment.childFragmentManager.fragments.asReversed().forEach { fragment ->
+                    if (fragment.javaClass.simpleName == fragmentClassName && fragment is OnReselectedDelegate) {
+                        fragment.onReselected()
+                        return@forEach
+                    }
+                }
+            }
+        }
+    }
 }

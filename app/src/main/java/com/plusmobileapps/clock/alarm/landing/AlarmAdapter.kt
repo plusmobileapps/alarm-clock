@@ -5,11 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.alarm.detail.AlarmDetailFragment.Companion.EXTRA_ALARM_ID
 import com.plusmobileapps.clock.data.alarm.Alarm
+import org.jetbrains.anko.bundleOf
 
 interface AlarmItemListener {
     fun alarmItemClicked(position: Int)
@@ -42,28 +45,26 @@ class AlarmAdapter(private val itemListener: AlarmItemListener)
 
 
 
-    class AlarmViewHolder(itemView: View, itemListener: AlarmItemListener) : RecyclerView.ViewHolder(itemView) {
+    class AlarmViewHolder(itemView: View, private val itemListener: AlarmItemListener) : RecyclerView.ViewHolder(itemView) {
         private val alarmToggle: Switch = itemView.findViewById(R.id.alarm_toggle)
         private val alarmTime: TextView = itemView.findViewById(R.id.edit_time_button)
         lateinit var mAlarm: Alarm
             private set
 
-        init {
-            alarmTime.setOnClickListener {
-                itemListener.alarmTimeClicked(adapterPosition)
-            }
-            itemView.setOnClickListener {
-                itemListener.alarmItemClicked(adapterPosition)
-            }
-            alarmToggle.setOnCheckedChangeListener { _, isChecked ->
-                itemListener.alarmSwitchToggled(adapterPosition, isChecked)
-            }
-        }
-
         fun bind(alarm: Alarm) {
             mAlarm = alarm
             alarmToggle.isChecked = alarm.enabled
             alarmTime.text = alarm.printTime()
+            alarmTime.setOnClickListener {
+                itemListener.alarmTimeClicked(adapterPosition)
+            }
+            itemView.setOnClickListener (
+                Navigation.createNavigateOnClickListener(R.id.action_alarmFragment_to_alarmDetailFragment,
+                        bundleOf(EXTRA_ALARM_ID to alarm.id))
+            )
+            alarmToggle.setOnCheckedChangeListener { _, isChecked ->
+                itemListener.alarmSwitchToggled(adapterPosition, isChecked)
+            }
         }
     }
 

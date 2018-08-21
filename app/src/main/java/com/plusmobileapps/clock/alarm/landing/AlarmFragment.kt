@@ -7,10 +7,12 @@ import android.content.Intent
 import android.os.Bundle
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,12 +22,15 @@ import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailFragment.Companion.EXTRA_ALARM_ID
 import com.plusmobileapps.clock.di.ViewModelFactory
+import com.plusmobileapps.clock.main.OnReselectedDelegate
+import com.plusmobileapps.clock.util.isSectionVisible
+import com.plusmobileapps.clock.util.setupActionBar
 import org.jetbrains.anko.bundleOf
 import java.util.*
 import javax.inject.Inject
 
 
-class AlarmFragment : Fragment(), AlarmItemListener {
+class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
 
     companion object {
         fun newInstance(): AlarmFragment {
@@ -73,10 +78,26 @@ class AlarmFragment : Fragment(), AlarmItemListener {
         return inflater.inflate(R.layout.fragment_alarm, container, false)
     }
 
-    private fun subscribeToAlarmList() = viewModel.getAlarms().observe(this, Observer {
-            it?.let {
-                alarmAdapter.submitList(it)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (isSectionVisible()) setupActionBar()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                view?.findNavController()?.navigateUp()
+                return true
             }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onReselected() = setupActionBar()
+
+    private fun setupActionBar() = setupActionBar(context?.getString(R.string.title_alarm) ?: "Alarm")
+
+    private fun subscribeToAlarmList() = viewModel.getAlarms().observe(this, Observer {
+                alarmAdapter.submitList(it)
         })
 
 
@@ -101,7 +122,7 @@ class AlarmFragment : Fragment(), AlarmItemListener {
     override fun alarmItemClicked(position: Int) {
         val id = viewModel.getAlarmId(position) ?: return
         val bundle = bundleOf(EXTRA_ALARM_ID to id)
-        navigator?.navigate(R.id.action_alarmFragment_to_alarmDetailFragment, bundle)
+        Navigation.createNavigateOnClickListener(R.id.action_alarmFragment_to_alarmDetailFragment, bundle)
     }
 
     override fun alarmTimeClicked(position: Int) {
