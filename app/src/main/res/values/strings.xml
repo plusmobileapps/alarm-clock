@@ -1,12 +1,14 @@
 <resources>
 
     <string name="bottomSheetBehavior">com.google.android.material.bottomsheet.BottomSheetBehavior</string>
+    <string name="toolbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 
 
     <string name="app_name">Clock+</string>
     <string name="title_alarm">Alarm</string>
     <string name="title_timer">Timer</string>
     <string name="title_stopwatch">Stopwatch</string>
+    <string name="settings">Settings</string>
 
     <string name="notification_channel_timer">Timers</string>
     <string name="notification_channel_timer_description">Play sounds when timer goes off</string>

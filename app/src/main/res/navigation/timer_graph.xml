@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timer_graph"
+    app:startDestination="@id/timerFragment">
+
+    <fragment
+        android:id="@+id/timerPickerFragment"
+        android:name="com.plusmobileapps.clock.timer.picker.TimerPickerFragment"
+        android:label="TimerPickerFragment" />
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.plusmobileapps.clock.timer.landing.TimerFragment"
+        android:label="fragment_timer"
+        tools:layout="@layout/fragment_timer" >
+        <action
+            android:id="@+id/action_timerFragment_to_settingsFragment3"
+            app:destination="@id/settingsFragment3" />
+        <action
+            android:id="@+id/action_timerFragment_to_timerPickerFragment"
+            app:destination="@id/timerPickerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment3"
+        android:name="com.plusmobileapps.clock.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

@@ -27,10 +27,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".alarm.detail.AlarmDetailActivity"></activity>
 
-        <service android:name=".timer.TimerService"
-            android:exported="false"/>
     </application>
 
 </manifest>

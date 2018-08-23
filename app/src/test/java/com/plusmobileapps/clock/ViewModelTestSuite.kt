@@ -10,7 +10,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
         TimerPickerViewModelTest::class,
-        MainActivityViewModelTest::class,
+//        MainActivityViewModelTest::class,
         TimerViewModelTest::class,
         AlarmLandingViewModelTest::class)
 class ViewModelTestSuite {

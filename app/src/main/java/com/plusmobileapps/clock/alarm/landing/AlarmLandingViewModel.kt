@@ -9,9 +9,7 @@ import com.plusmobileapps.clock.data.alarm.Alarm
 import javax.inject.Inject
 
 
-class AlarmLandingViewModel @Inject constructor(
-        private val alarmRepository: AlarmRepository,
-        val firebaseAuthHelper: FirebaseAuthHelper): ViewModel() {
+class AlarmLandingViewModel @Inject constructor(private val alarmRepository: AlarmRepository): ViewModel() {
 
     private val alarms: LiveData<List<Alarm>> = alarmRepository.getAlarms()
     val showTimePickerToggle = SingleLiveEvent<Unit>()

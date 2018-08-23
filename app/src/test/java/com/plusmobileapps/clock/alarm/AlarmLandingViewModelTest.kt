@@ -33,7 +33,7 @@ class AlarmLandingViewModelTest {
         }
         `when`(alarmRepository.getAlarms()).thenReturn(list)
 
-        viewmodel = AlarmLandingViewModel(alarmRepository, firebaseAuthHelper)
+        viewmodel = AlarmLandingViewModel(alarmRepository)
     }
 
     @Test
