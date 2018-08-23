@@ -47,6 +47,12 @@ If you ever look up "SQLite Android," you will find in the first [link](https://
 
 [Room](https://developer.android.com/topic/libraries/architecture/room) is the solution to make this exact task of caching data simple, and with Kotlin even simpler. When paired with `LiveData`, notifying UI is even easier since Room is able to return `LiveData` objects and emit changes to the underlying data to its observers if any changes are made to the database.
 
+### Navigation
+
+With Google having no strong opinion on navigation and the iterations `Fragment`'s have gone through
+over the years. [The Navigation Architecture Component](https://developer.android.com/topic/libraries/architecture/navigation/) is a useful tool for easily implementing navigation in your app with a single `Activity` housing the app chrome (bottom navigation bar, app bar, components that are stationary) and each content screen being a `Fragment`. This component provides a nice GUI to link content screens to one another and allow you to navigate your app without ever needing to make a fragment transaction!
+
+As of today, this component is still in alpha and has some limitations but is a great start to create navigation quickly for any app. 
 
 ## Firebase
 
@@ -59,12 +65,11 @@ To glue each of these components together with dependency injection, [Dagger 2](
 
 ### Coming Soon
 
-* [Navigation](https://developer.android.com/topic/libraries/architecture/navigation.html) - GUI interface to create robust navigation in Android Studio with support for deep linking, type safe arguments, and easy back stack management 
 * [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) - abstraction over every possible way to do background work on Android independent of platform with guaranteed execution
 
 ## Contribute
 
-Currently this project is being developed in [Android Stuidio 3.2 beta 4](https://developer.android.com/studio/preview/) as some of the experimental features are being used with plans to update to the stable channel upon release. 
+Currently this project is being developed in [Android Stuidio 3.2 beta 5](https://developer.android.com/studio/preview/) as some of the experimental features are being used with plans to update to the stable channel upon release. 
 
 If you wish to contribute, there is a [Trello board](https://trello.com/b/gpvd905I) which if you wish to have access to edit, please also contact the admin [andrew@plusmobileapps.com](mailto:andrew@plusmobileapps.com).
 
