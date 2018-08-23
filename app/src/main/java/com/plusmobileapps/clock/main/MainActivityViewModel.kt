@@ -21,13 +21,4 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
 
     fun getViewStateLiveData() : LiveData<ViewState> = viewState
 
-//    fun onBackKeyPressed() {
-//        val currentTab = viewState.value
-//        when(currentTab) {
-//            ViewState.Alarm -> alarmStack.value?.pop()
-//            ViewState.Timer -> timerStack.value?.pop()
-//            ViewState.Stopwatch ->
-//        }
-//    }
-
 }

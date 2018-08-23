@@ -22,10 +22,17 @@ class TimerPickerViewModel @Inject constructor(private val timerRepository: Time
     fun getHours() : LiveData<Int> = hours
 
     fun onNumberClicked(number: String) {
-        if (timerStack.size <= 6) {
-            timerStack.push(number.toInt())
-            update()
+        val num = number.toIntOrNull() ?: return
+        when(timerStack.size) {
+            0 -> if (number.toInt() != 0) pushNumberToStack(num)
+            in 1..6 -> pushNumberToStack(num)
+            else -> Unit
         }
+    }
+
+    private fun pushNumberToStack(number: Int) {
+        timerStack.push(number)
+        update()
     }
 
     fun onDeleteClicked() {

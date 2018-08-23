@@ -55,6 +55,33 @@ class TimerPickerViewModelTest {
     }
 
     @Test
+    fun onNumberClickedStartingWithAZero() {
+        viewModel.onNumberClicked("0")
+        viewModel.onNumberClicked("1")
+        assert(viewModel.getSeconds().value == 1)
+        viewModel.onNumberClicked("2")
+        assert(viewModel.getSeconds().value == 12)
+        viewModel.onNumberClicked("3")
+        assert(viewModel.getMinutes().value == 1)
+        assert(viewModel.getSeconds().value == 23)
+        viewModel.onNumberClicked("4")
+        assert(viewModel.getMinutes().value == 12)
+        assert(viewModel.getSeconds().value == 34)
+        viewModel.onNumberClicked("5")
+        assert(viewModel.getHours().value == 1)
+        assert(viewModel.getMinutes().value == 23)
+        assert(viewModel.getSeconds().value == 45)
+        viewModel.onNumberClicked("6")
+        assert(viewModel.getHours().value == 12)
+        assert(viewModel.getMinutes().value == 34)
+        assert(viewModel.getSeconds().value == 56)
+        viewModel.onNumberClicked("5")
+        assert(viewModel.getHours().value == 12)
+        assert(viewModel.getMinutes().value == 34)
+        assert(viewModel.getSeconds().value == 56)
+    }
+
+    @Test
     fun onDeleteClicked() {
         primeStack()
         viewModel.onDeleteClicked()
