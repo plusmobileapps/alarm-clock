@@ -21,11 +21,13 @@ class AlarmLandingViewModelTest {
     private lateinit var viewmodel: AlarmLandingViewModel
     private lateinit var alarmRepository: AlarmRepository
     private lateinit var firebaseAuthHelper: FirebaseAuthHelper
-    private lateinit var observer: Observer<Unit>
+    private lateinit var showTimePickerObserver: Observer<Alarm>
+    private lateinit var openAlarmObserver: Observer<Int>
 
     @Before
     fun setup() {
-        observer = mock(Observer::class.java) as Observer<Unit>
+        showTimePickerObserver = mock(Observer::class.java) as Observer<Alarm>
+        openAlarmObserver = mock(Observer::class.java) as Observer<Int>
         alarmRepository = mock(AlarmRepository::class.java)
         firebaseAuthHelper = mock(FirebaseAuthHelper::class.java)
         val list = MutableLiveData<List<Alarm>>().apply {
@@ -52,15 +54,23 @@ class AlarmLandingViewModelTest {
     @Test
     fun testUpdateAlarmToggle() {
         val beforeAlarm = viewmodel.getAlarms().value!![0]
-        viewmodel.updateAlarmToggle(true, 0)
+        viewmodel.updateAlarmToggle(true, beforeAlarm)
         verify(alarmRepository).saveAlarm(beforeAlarm.apply { enabled = true })
     }
 
     @Test
-    fun testShowTimePicker() {
-        viewmodel.showTimePickerToggle.observe(TestUtils.TEST_OBSERVER, observer)
+    fun testShowTimePickerNew() {
+        viewmodel.showTimePicker.observe(TestUtils.TEST_OBSERVER, showTimePickerObserver)
         viewmodel.showTimePicker()
-        verify(observer).onChanged(null)
+        verify(showTimePickerObserver).onChanged(null)
+    }
+
+    @Test
+    fun testShowTimePickerEdit() {
+        viewmodel.showTimePicker.observe(TestUtils.TEST_OBSERVER, showTimePickerObserver)
+        val alarm = Alarm(id = 1)
+        viewmodel.showTimePicker(alarm)
+        verify(showTimePickerObserver).onChanged(alarm)
     }
 
     @Test
@@ -68,5 +78,13 @@ class AlarmLandingViewModelTest {
         val alarm = alarmRepository.getAlarms().value!![0]
         viewmodel.deleteAlarm(alarm)
         verify(alarmRepository).deleteAlarm(alarm)
+    }
+
+    @Test
+    fun testOpenAlarm() {
+        val alarm = Alarm(id = 1)
+        viewmodel.openAlarm.observe(TestUtils.TEST_OBSERVER, openAlarmObserver)
+        viewmodel.openAlarm(alarm)
+        verify(openAlarmObserver).onChanged(1)
     }
 }

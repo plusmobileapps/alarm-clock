@@ -3,7 +3,6 @@ package com.plusmobileapps.clock.alarm.landing
 import android.app.TimePickerDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 
 import android.view.LayoutInflater
@@ -18,9 +17,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.plusmobileapps.clock.DataBindingViewHolder
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.alarm.detail.AlarmDetailFragment.Companion.EXTRA_ALARM_ID
+import com.plusmobileapps.clock.data.alarm.Alarm
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.main.OnReselectedDelegate
 import com.plusmobileapps.clock.util.isSectionVisible
@@ -30,7 +31,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
+class AlarmFragment : Fragment(), OnReselectedDelegate {
 
     companion object {
         fun newInstance(): AlarmFragment {
@@ -47,7 +48,12 @@ class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
 
     private lateinit var viewModel: AlarmLandingViewModel
 
-    private val alarmAdapter = AlarmAdapter(this)
+    private val alarmAdapter by lazy { AlarmAdapter(viewModel) }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_alarm, container, false)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -60,7 +66,9 @@ class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
             }
             val swipeHandler = object : SwipeToDeleteCallback(it.context) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    if (viewHolder is AlarmAdapter.AlarmViewHolder) viewModel.deleteAlarm(viewHolder.mAlarm)
+                    val vh = viewHolder as DataBindingViewHolder
+                    val alarm = vh.data as Alarm
+                    viewModel.deleteAlarm(alarm)
                 }
             }
             ItemTouchHelper(swipeHandler).apply { attachToRecyclerView(recyclerView) }
@@ -70,12 +78,8 @@ class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
             }
             subscribeToAlarmList()
             subscribeToShowingTimePicker()
+            subscribeToOpeningAlarm()
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_alarm, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,14 +100,22 @@ class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
 
     private fun setupActionBar() = setupActionBar(context?.getString(R.string.title_alarm) ?: "Alarm")
 
-    private fun subscribeToAlarmList() = viewModel.getAlarms().observe(this, Observer {
-                alarmAdapter.submitList(it)
+    private fun subscribeToAlarmList() {
+        viewModel.getAlarms().observe(this, Observer {
+            alarmAdapter.submitList(it)
         })
-
+    }
 
     private fun subscribeToShowingTimePicker() {
-        viewModel.showTimePickerToggle.observe(this, Observer {
-            showTimePicker(timeListener = addAlarmTimeListener)
+        viewModel.showTimePicker.observe(this, Observer {
+            showTimePicker(startHour = it.hour, startMin = it.min, timeListener = addAlarmTimeListener)
+        })
+    }
+
+    private fun subscribeToOpeningAlarm() {
+        viewModel.openAlarm.observe(this, Observer {
+            val bundle = bundleOf(EXTRA_ALARM_ID to it)
+            navigator?.navigate(R.id.action_alarmFragment_to_alarmDetailFragment, bundle)
         })
     }
 
@@ -117,27 +129,6 @@ class AlarmFragment : Fragment(), AlarmItemListener, OnReselectedDelegate {
 
     private val addAlarmTimeListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
         viewModel.addAlarm(hour, min)
-    }
-
-    override fun alarmItemClicked(position: Int) {
-        val id = viewModel.getAlarmId(position) ?: return
-        val bundle = bundleOf(EXTRA_ALARM_ID to id)
-        Navigation.createNavigateOnClickListener(R.id.action_alarmFragment_to_alarmDetailFragment, bundle)
-    }
-
-    override fun alarmTimeClicked(position: Int) {
-        val alarm = viewModel.getAlarm(position)
-        alarm?.let {
-            showTimePicker(it.hour, it.min, TimePickerDialog.OnTimeSetListener {  _: TimePicker, hour: Int, min: Int ->
-                it.hour = hour
-                it.min = min
-                viewModel.updateAlarm(it)
-            })
-        }
-    }
-
-    override fun alarmSwitchToggled(position: Int, isEnabled: Boolean) {
-        viewModel.updateAlarmToggle(isEnabled, position)
     }
 
 }
