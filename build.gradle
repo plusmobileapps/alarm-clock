@@ -11,7 +11,7 @@ ext {
 
 buildscript {
 
-    ext.kotlin_version = '1.2.50'
+    ext.kotlin_version = '1.2.51'
     ext.anko_version='0.10.5'
     ext.jetpackVersion = '1.0.0-alpha3'
     ext.googleServicesVersion ='4.0.1'
@@ -40,7 +40,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-beta05'
+        classpath 'com.android.tools.build:gradle:3.2.0-rc01'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.gms:google-services:$googleServicesVersion"
 

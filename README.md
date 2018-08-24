@@ -69,7 +69,7 @@ To glue each of these components together with dependency injection, [Dagger 2](
 
 ## Contribute
 
-Currently this project is being developed in [Android Stuidio 3.2 beta 5](https://developer.android.com/studio/preview/) as some of the experimental features are being used with plans to update to the stable channel upon release. 
+Currently this project is being developed in [Android Stuidio 3.2 RC1](https://developer.android.com/studio/preview/) as some of the experimental features are being used with plans to update to the stable channel upon release. 
 
 If you wish to contribute, there is a [Trello board](https://trello.com/b/gpvd905I) which if you wish to have access to edit, please also contact the admin [andrew@plusmobileapps.com](mailto:andrew@plusmobileapps.com).
 
