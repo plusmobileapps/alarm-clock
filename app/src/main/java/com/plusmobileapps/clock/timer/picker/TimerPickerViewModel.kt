@@ -6,26 +6,31 @@ import com.plusmobileapps.clock.data.timer.Timer
 import com.plusmobileapps.clock.data.timer.TimerRepository
 import java.util.Stack
 import javax.inject.Inject
-import kotlin.math.min
 
 class TimerPickerViewModel @Inject constructor(private val timerRepository: TimerRepository): ViewModel() {
 
-    private val seconds = MutableLiveData<Int>()
-    private val minutes = MutableLiveData<Int>()
-    private val hours = MutableLiveData<Int>()
+    private var seconds = 0
+    private var minutes = 0
+    private var hours = 0
+    private val displaySeconds = MutableLiveData<String>()
+    private val displayMinutes = MutableLiveData<String>()
+    private val displayHours = MutableLiveData<String>()
     val timerButtonStartEvent = SingleLiveEvent<Unit>()
     val snackbarError = SingleLiveEvent<Unit>()
     private val timerStack = Stack<Int>()
 
-    fun getSeconds() : LiveData<Int> = seconds
-    fun getMinutes() : LiveData<Int> = minutes
-    fun getHours() : LiveData<Int> = hours
+    init {
+        updateDisplayTimes()
+    }
 
-    fun onNumberClicked(number: String) {
-        val num = number.toIntOrNull() ?: return
+    fun getSeconds() : LiveData<String> = displaySeconds
+    fun getMinutes() : LiveData<String> = displayMinutes
+    fun getHours() : LiveData<String> = displayHours
+
+    fun onNumberClicked(number: Int) {
         when(timerStack.size) {
-            0 -> if (number.toInt() != 0) pushNumberToStack(num)
-            in 1..6 -> pushNumberToStack(num)
+            0 -> if (number != 0) pushNumberToStack(number)
+            in 1..6 -> pushNumberToStack(number)
             else -> Unit
         }
     }
@@ -45,7 +50,11 @@ class TimerPickerViewModel @Inject constructor(private val timerRepository: Time
     fun onTimerStartedFabClick() {
         val totalTime = getTotalTimeInMillis()
         if (totalTime != 0) {
-            timerRepository.saveTimer(Timer(startTimeMillis = totalTime.toLong(), currentTimeLeftMillis = totalTime.toLong()))
+            timerRepository.saveTimer(
+                    Timer(startTimeMillis = totalTime.toLong(),
+                            currentTimeLeftMillis = totalTime.toLong(),
+                            timerText = "TODO: replace with timer text"))
+            reset()
             timerButtonStartEvent.call()
         } else {
             snackbarError.call()
@@ -57,76 +66,69 @@ class TimerPickerViewModel @Inject constructor(private val timerRepository: Time
         val stack = Stack<Int>().apply { addAll(timerStack) }
         when (totalNumbers) {
             0 -> {
-                seconds.value = 0
-                minutes.value = 0
-                hours.value = 0
+                seconds = 0
+                minutes = 0
+                hours = 0
             }
             1 -> {
-                seconds.value = stack.pop()
-                minutes.value = 0
-                hours.value = 0
+                seconds = stack.pop()
+                minutes = 0
+                hours = 0
             }
             2 -> {
-                updateSeconds(stack)
-                minutes.value = 0
-                hours.value = 0
+                seconds = stack.pop() + (stack.pop() * 10)
+                minutes = 0
+                hours = 0
             }
             3 -> {
-                updateSeconds(stack)
-                minutes.value = stack.pop()
-                hours.value = 0
+                seconds = stack.pop() + (stack.pop() * 10)
+                minutes = stack.pop()
+                hours = 0
             }
             4 -> {
-                updateSeconds(stack)
-                updateMinutes(stack)
-                hours.value = 0
+                seconds = stack.pop() + (stack.pop() * 10)
+                minutes = stack.pop() + (stack.pop() * 10)
+                hours = 0
             }
             5 ->  {
-                updateSeconds(stack)
-                updateMinutes(stack)
-                hours.value = stack.pop()
+                seconds = stack.pop() + (stack.pop() * 10)
+                minutes = stack.pop() + (stack.pop() * 10)
+                hours = stack.pop()
             }
             6 -> {
-                updateSeconds(stack)
-                updateMinutes(stack)
-                updateHours(stack)
+                seconds = stack.pop() + (stack.pop() * 10)
+                minutes = stack.pop() + (stack.pop() * 10)
+                hours = stack.pop() + (stack.pop() * 10)
             }
         }
+        updateDisplayTimes()
     }
 
-    private fun updateSeconds(stack: Stack<Int>) {
-        var seconds = stack.pop()
-        seconds += (stack.pop() * 10)
-        this.seconds.value = seconds
-    }
-
-    private fun updateMinutes(stack: Stack<Int>) {
-        var minutes = stack.pop()
-        minutes += (stack.pop() * 10)
-        this.minutes.value = minutes
-    }
-
-    private fun updateHours(stack: Stack<Int>) {
-        var hours = stack.pop()
-        hours += (stack.pop() * 10)
-        this.hours.value = hours
+    private fun updateDisplayTimes() {
+        displaySeconds.value = getDisplayTime(seconds)
+        displayMinutes.value = getDisplayTime(minutes)
+        displayHours.value = getDisplayTime(hours)
     }
 
     fun getDisplayTime(number: Int) : String {
         return when (number) {
             0 -> "00"
-            1,2,3,4,5,6,7,8,9 -> "0$number"
+            in 1..9 -> "0$number"
             else -> number.toString()
         }
     }
 
     private fun getTotalTimeInMillis() : Int {
-        val seconds = seconds.value ?: 0
-        val minutes = minutes.value ?: 0
-        val hours = hours.value ?: 0
-
         val totalSeconds = seconds + (minutes * 60) + (hours * 60 * 60)
         return totalSeconds * 1000
+    }
+
+    private fun reset() {
+        hours = 0
+        minutes = 0
+        seconds = 0
+        timerStack.clear()
+        updateDisplayTimes()
     }
 
 }

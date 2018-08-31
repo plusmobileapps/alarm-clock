@@ -54,6 +54,10 @@ over the years. [The Navigation Architecture Component](https://developer.androi
 
 As of today, this component is still in alpha and has some limitations but is a great start to create navigation quickly for any app. 
 
+### Databinding 
+
+There are plenty of solutions out there to get rid of the dreaded `findViewById()` call whether that be [Kotlin Android Extensions](https://kotlinlang.org/docs/tutorials/android-plugin.html) or [Kotter Knife](https://github.com/JakeWharton/kotterknife). The solution Google has proposed in Architecture Components is [Data Binding](https://developer.android.com/topic/libraries/data-binding/) which allows you to bind your data directly in the layout files of your XML. Databinding has grown more powerful over the years offering the ability delegate clicks back to the ViewModel and bind the values from LiveData that live in your viewmodel to the view. 
+
 ## Firebase
 
 Firebase is configured in the app currently with Firebase Auth and Firebase Cloud Messaging, with plans to add more tools from the platform. If you wish to contribute and gain access to the console, please contact the admin [andrew@plusmobileapps.com](mailto:andrew@plusmobileapps.com). 

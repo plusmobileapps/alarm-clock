@@ -1,5 +1,6 @@
 package com.plusmobileapps.clock.timer.landing
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,33 +12,15 @@ import javax.inject.Inject
 class TimerViewModel @Inject constructor(private val timerRepository: TimerRepository) : ViewModel() {
 
     val timers: LiveData<List<Timer>> = timerRepository.getTimers()
-    val timerClicked = SingleLiveEvent<Unit>()
-    private val timePickerTime = MutableLiveData<String>()
+    val showTimerPicker = SingleLiveEvent<Unit>()
 
-    fun getTimePickerTime() : LiveData<String> = timePickerTime
+    fun deleteTimer(timer: Timer) = timerRepository.deleteTimer(timer)
 
-    fun timerAddClicked() = timerClicked.call()
+    fun resetTimer(timer: Timer) = timerRepository.saveTimer(timer)
 
-    fun addTimer(seconds: Int, minutes: Int, hours: Int) {
-        timerRepository.saveTimer(Timer(startTimeMillis = 1000, currentTimeLeftMillis = 1000))
-    }
+    fun addTimerButtonClicked() = showTimerPicker.call()
 
-    fun deleteTimer(position: Int) {
-        timers.value?.let {
-            timerRepository.deleteTimer(it[position])
-        }
-    }
-
-    fun resetTimer(position: Int) {
-        timers.value?.let {
-            val timer = it[position].apply { resetTimer() }
-            timerRepository.saveTimer(timer)
-        }
-    }
-
-    fun toggleTimer(position: Int) {
-        timers.value?.let {
-            val timer = it[position]
-        }
+    fun toggleTimer(timer: Timer) {
+        Log.d("Timer", "timer was toggled!")
     }
 }
