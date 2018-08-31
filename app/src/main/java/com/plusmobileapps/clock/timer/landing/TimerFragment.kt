@@ -61,21 +61,23 @@ class TimerFragment : Fragment(), OnReselectedDelegate {
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                 adapter = timerAdapter
             }
-            it.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-                navigator.navigate(R.id.timerPickerFragment)
-            }
-            subscribeToTimerList()
+            subscribe()
+        }
+    }
+
+    private fun subscribe() {
+        with(timerViewModel) {
+            timers.observe(this@TimerFragment, Observer {
+                timerAdapter.submitList(it)
+            })
+            showTimerPicker.observe(this@TimerFragment, Observer {
+                navigator.navigate(R.id.action_timerFragment_to_timerPickerFragment)
+            })
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (isSectionVisible()) setupActionBar()
-    }
-
-    private fun subscribeToTimerList() {
-        timerViewModel.timers.observe(this, Observer {
-            timerAdapter.submitList(it)
-        })
     }
 
     override fun onReselected() = setupActionBar()

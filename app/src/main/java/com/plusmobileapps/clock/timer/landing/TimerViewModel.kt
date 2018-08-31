@@ -12,10 +12,13 @@ import javax.inject.Inject
 class TimerViewModel @Inject constructor(private val timerRepository: TimerRepository) : ViewModel() {
 
     val timers: LiveData<List<Timer>> = timerRepository.getTimers()
+    val showTimerPicker = SingleLiveEvent<Unit>()
 
     fun deleteTimer(timer: Timer) = timerRepository.deleteTimer(timer)
 
     fun resetTimer(timer: Timer) = timerRepository.saveTimer(timer)
+
+    fun addTimerButtonClicked() = showTimerPicker.call()
 
     fun toggleTimer(timer: Timer) {
         Log.d("Timer", "timer was toggled!")
