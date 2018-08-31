@@ -1,9 +1,9 @@
 package com.plusmobileapps.clock.alarm
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.plusmobileapps.clock.FirebaseAuthHelper
 import com.plusmobileapps.clock.alarm.landing.AlarmLandingViewModel
 import com.plusmobileapps.clock.data.alarm.Alarm
 import com.plusmobileapps.clock.data.alarm.AlarmRepository
@@ -20,22 +20,40 @@ class AlarmLandingViewModelTest {
 
     private lateinit var viewmodel: AlarmLandingViewModel
     private lateinit var alarmRepository: AlarmRepository
-    private lateinit var firebaseAuthHelper: FirebaseAuthHelper
-    private lateinit var showTimePickerObserver: Observer<Alarm>
+    private lateinit var showTimePickerObserver: Observer<Alarm?>
     private lateinit var openAlarmObserver: Observer<Int>
+    private lateinit var liveAlarm: LiveData<Alarm>
 
     @Before
     fun setup() {
-        showTimePickerObserver = mock(Observer::class.java) as Observer<Alarm>
+        showTimePickerObserver = mock(Observer::class.java) as Observer<Alarm?>
         openAlarmObserver = mock(Observer::class.java) as Observer<Int>
         alarmRepository = mock(AlarmRepository::class.java)
-        firebaseAuthHelper = mock(FirebaseAuthHelper::class.java)
+        val alarm = Alarm(id = 0, enabled = false)
+        liveAlarm = MutableLiveData<Alarm>().apply {
+            value = alarm
+        }
         val list = MutableLiveData<List<Alarm>>().apply {
-            value = listOf<Alarm>(Alarm(id = 0, enabled = false))
+            value = listOf<Alarm>(alarm)
         }
         `when`(alarmRepository.getAlarms()).thenReturn(list)
+        `when`(alarmRepository.getAlarm(0)).thenReturn(liveAlarm)
 
         viewmodel = AlarmLandingViewModel(alarmRepository)
+    }
+
+    @Test
+    fun testGetAlarms() {
+        val alarms = viewmodel.getAlarms()
+        assert(alarms is LiveData<List<Alarm>>)
+        assert(alarms == alarmRepository.getAlarms())
+    }
+
+    @Test
+    fun testGetAlarmById() {
+        val alarm = viewmodel.getAlarmById(0)
+        assert(alarm is LiveData<Alarm>)
+        assert(alarm == liveAlarm)
     }
 
     @Test
@@ -59,9 +77,9 @@ class AlarmLandingViewModelTest {
     }
 
     @Test
-    fun testShowTimePickerNew() {
+    fun testFabClicked() {
         viewmodel.showTimePicker.observe(TestUtils.TEST_OBSERVER, showTimePickerObserver)
-        viewmodel.showTimePicker()
+        viewmodel.fabClicked()
         verify(showTimePickerObserver).onChanged(null)
     }
 
@@ -69,7 +87,7 @@ class AlarmLandingViewModelTest {
     fun testShowTimePickerEdit() {
         viewmodel.showTimePicker.observe(TestUtils.TEST_OBSERVER, showTimePickerObserver)
         val alarm = Alarm(id = 1)
-        viewmodel.showTimePicker(alarm)
+        viewmodel.editAlarmTimeClicked(alarm)
         verify(showTimePickerObserver).onChanged(alarm)
     }
 
