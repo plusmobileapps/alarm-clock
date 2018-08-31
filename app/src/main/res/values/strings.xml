@@ -40,6 +40,7 @@
     <string name="timer_hours_short_label">h</string>
     <string name="timer_minutes_short_label">m</string>
     <string name="timer_seconds_short_label">s</string>
+    <string name="timer_label_placeholder">Tap to add label</string>
 
     <string name="label">Label</string>
 

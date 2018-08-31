@@ -11,14 +11,10 @@ import javax.inject.Inject
 class AlarmLandingViewModel @Inject constructor(private val alarmRepository: AlarmRepository): ViewModel() {
 
     private val alarms: LiveData<List<Alarm>> = alarmRepository.getAlarms()
-    val showTimePicker = SingleLiveEvent<Alarm>()
+    val showTimePicker = SingleLiveEvent<Alarm?>()
     val openAlarm = SingleLiveEvent<Int>()
 
     fun getAlarms(): LiveData<List<Alarm>> = alarms
-
-    fun getAlarm(position: Int): Alarm? = alarms.value?.get(position)
-
-    fun getAlarmId(position: Int): Int? = alarms.value?.get(position)?.id
 
     fun getAlarmById(id: Int): LiveData<Alarm> = alarmRepository.getAlarm(id)
 
@@ -38,9 +34,11 @@ class AlarmLandingViewModel @Inject constructor(private val alarmRepository: Ala
         alarmRepository.saveAlarm(newAlarm)
     }
 
-    fun showTimePicker(alarm: Alarm? = null) {
+    fun editAlarmTimeClicked(alarm: Alarm) {
         showTimePicker.value = alarm
     }
+
+    fun fabClicked() = showTimePicker.call()
 
     fun deleteAlarm(alarm: Alarm) = alarmRepository.deleteAlarm(alarm)
 

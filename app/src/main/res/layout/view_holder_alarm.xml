@@ -38,7 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@{data.printTime}"
-                android:onClick="@{(view) -> viewmodel.showTimePicker(data)}"/>
+                android:onClick="@{(view) -> viewmodel.editAlarmTimeClicked(data)}"/>
 
             <Switch
                 android:id="@+id/alarm_toggle"

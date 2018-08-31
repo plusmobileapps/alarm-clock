@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
@@ -16,16 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
+import com.plusmobileapps.clock.databinding.FragmentTimerBinding
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.main.OnReselectedDelegate
 import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
 import com.plusmobileapps.clock.util.isSectionVisible
 import com.plusmobileapps.clock.util.setupActionBar
 import javax.inject.Inject
-
-interface TimerPickerActivityCallback {
-    fun onTimerStarted(seconds: Int, minutes: Int, hours: Int)
-}
 
 class TimerFragment : Fragment(), OnReselectedDelegate {
 
@@ -39,27 +37,28 @@ class TimerFragment : Fragment(), OnReselectedDelegate {
     private lateinit var recyclerView: RecyclerView
     private lateinit var navigator: NavController
 
-    private val itemListener = object : TimerItemListener {
-        override fun timerToggled(position: Int) = timerViewModel.toggleTimer(position)
-        override fun timerReset(position: Int) = timerViewModel.resetTimer(position)
-        override fun timerItemDeleted(position: Int) = timerViewModel.deleteTimer(position)
-    }
+    private lateinit var timerAdapter: TimerAdapter
 
-    private val timerAdapter = TimerAdapter(itemListener)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         MyApplication.appComponent.inject(this)
+        val binding = DataBindingUtil.inflate<FragmentTimerBinding>(inflater, R.layout.fragment_timer, container, false)
+        timerViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(TimerViewModel::class.java)
+        binding.apply {
+            viewmodel = timerViewModel
+            setLifecycleOwner(this@TimerFragment)
+        }
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        timerViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(TimerViewModel::class.java)
+        timerAdapter = TimerAdapter(timerViewModel)
         view?.let {
             navigator = Navigation.findNavController(it)
-            recyclerView = it.findViewById(R.id.recycler_view)
-            recyclerView.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            recyclerView = it.findViewById<RecyclerView>(R.id.recycler_view).apply {
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                 adapter = timerAdapter
             }
             it.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
@@ -79,15 +78,8 @@ class TimerFragment : Fragment(), OnReselectedDelegate {
         })
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_timer, container, false)
-    }
-
     override fun onReselected() = setupActionBar()
 
-    private fun setupActionBar() = setupActionBar(context?.getString(R.string.title_timer) ?: "Timer")
+    private fun setupActionBar() = setupActionBar(requireContext().getString(R.string.title_timer))
 
 }
