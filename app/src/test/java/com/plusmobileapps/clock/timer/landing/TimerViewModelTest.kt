@@ -29,7 +29,7 @@ class TimerViewModelTest {
     fun setUp() {
         showTimerPickerObserver = mock(Observer::class.java) as Observer<Unit>
         repository = mock(TimerRepository::class.java)
-        timer = Timer(id = 0, startTimeMillis = 0L, currentTimeLeftMillis = 2332L, timerText = "00:00")
+        timer = Timer(id = 0, startTimeMillis = 0L, originalStartTimeMillis = 2332L, timerText = "00:00")
         val list = listOf<Timer>(timer)
         liveTimers = MutableLiveData<List<Timer>>().apply {
             value = list

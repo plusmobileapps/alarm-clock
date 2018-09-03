@@ -7,23 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.plusmobileapps.clock.MyApplication
 import com.plusmobileapps.clock.R
 import com.plusmobileapps.clock.databinding.FragmentTimerBinding
 import com.plusmobileapps.clock.di.ViewModelFactory
 import com.plusmobileapps.clock.main.OnReselectedDelegate
-import com.plusmobileapps.clock.timer.picker.TimerPickerFragment
+import com.plusmobileapps.clock.timer.picker.TimerPickerViewModel
 import com.plusmobileapps.clock.util.isSectionVisible
 import com.plusmobileapps.clock.util.setupActionBar
 import javax.inject.Inject
+
 
 class TimerFragment : Fragment(), OnReselectedDelegate {
 
@@ -34,6 +33,7 @@ class TimerFragment : Fragment(), OnReselectedDelegate {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var timerViewModel: TimerViewModel
+    private lateinit var timerPickerViewModel: TimerPickerViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var navigator: NavController
 
@@ -45,6 +45,8 @@ class TimerFragment : Fragment(), OnReselectedDelegate {
         MyApplication.appComponent.inject(this)
         val binding = DataBindingUtil.inflate<FragmentTimerBinding>(inflater, R.layout.fragment_timer, container, false)
         timerViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(TimerViewModel::class.java)
+        timerPickerViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(TimerPickerViewModel::class.java)
+
         binding.apply {
             viewmodel = timerViewModel
             setLifecycleOwner(this@TimerFragment)
@@ -67,13 +69,16 @@ class TimerFragment : Fragment(), OnReselectedDelegate {
 
     private fun subscribe() {
         with(timerViewModel) {
-            timers.observe(this@TimerFragment, Observer {
-                timerAdapter.submitList(it)
+            timers.observe(this@TimerFragment, Observer { timers ->
+                timerAdapter.submitList(timers)
             })
             showTimerPicker.observe(this@TimerFragment, Observer {
                 navigator.navigate(R.id.action_timerFragment_to_timerPickerFragment)
             })
         }
+        timerPickerViewModel.startTimer.observe(this@TimerFragment, Observer { timer ->
+            timerViewModel.toggleTimer(timer)
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

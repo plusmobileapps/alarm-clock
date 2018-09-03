@@ -61,7 +61,7 @@ class TimerPickerFragment : Fragment(), OnReselectedDelegate {
 
     private fun subscribe() {
         with(timerViewModel) {
-            timerButtonStartEvent.observe(this@TimerPickerFragment, Observer {
+            closeTimerPicker.observe(this@TimerPickerFragment, Observer {
                 navController.navigateUp()
             })
 

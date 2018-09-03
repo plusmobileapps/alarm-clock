@@ -95,9 +95,9 @@ class TimerPickerViewModelTest {
     @Test
     fun onTimerStartedFabClickSuccess() {
         primeStack()
-        viewModel.timerButtonStartEvent.observe(TestUtils.TEST_OBSERVER, observer)
+        viewModel.closeTimerPicker.observe(TestUtils.TEST_OBSERVER, observer)
         viewModel.onTimerStartedFabClick()
-        verify(repository).saveTimer(Timer(startTimeMillis = 12000, currentTimeLeftMillis = 12000, timerText = "TODO: replace with timer text"))
+        verify(repository).saveTimer(Timer(startTimeMillis = 12000, originalStartTimeMillis = 12000, timerText = "TODO: replace with timer text"))
         verify(observer).onChanged(null)
     }
 

@@ -15,7 +15,8 @@ class TimerPickerViewModel @Inject constructor(private val timerRepository: Time
     private val displaySeconds = MutableLiveData<String>()
     private val displayMinutes = MutableLiveData<String>()
     private val displayHours = MutableLiveData<String>()
-    val timerButtonStartEvent = SingleLiveEvent<Unit>()
+    val closeTimerPicker = SingleLiveEvent<Unit>()
+    val startTimer = SingleLiveEvent<Timer>()
     val snackbarError = SingleLiveEvent<Unit>()
     private val timerStack = Stack<Int>()
 
@@ -49,16 +50,16 @@ class TimerPickerViewModel @Inject constructor(private val timerRepository: Time
 
     fun onTimerStartedFabClick() {
         val totalTime = getTotalTimeInMillis()
-        if (totalTime != 0) {
-            timerRepository.saveTimer(
-                    Timer(startTimeMillis = totalTime.toLong(),
-                            currentTimeLeftMillis = totalTime.toLong(),
-                            timerText = "TODO: replace with timer text"))
-            reset()
-            timerButtonStartEvent.call()
-        } else {
-            snackbarError.call()
-        }
+        if (totalTime != 0) startTimer(totalTime) else snackbarError.call()
+    }
+
+    private fun startTimer(totalTime: Int) {
+        val timer = Timer(startTimeMillis = totalTime.toLong(),
+                originalStartTimeMillis = totalTime.toLong())
+        timerRepository.saveTimer(timer)
+        reset()
+        closeTimerPicker.call()
+        startTimer.value = timer
     }
 
     private fun update() {
